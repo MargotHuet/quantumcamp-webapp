@@ -1,0 +1,61 @@
+name: CI Workflow
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+jobs:
+  front-end:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js for front-end
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          
+      - name: Install front-end dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Lint the frontend
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Build the frontend
+        run: |
+          cd frontend
+          npm run build
+
+  back-end:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js for back-end
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          
+      - name: Install back-end dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Start the backend
+        run: |
+          cd backend
+          npm start
