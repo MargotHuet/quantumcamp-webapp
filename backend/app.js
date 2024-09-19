@@ -1,17 +1,32 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+// Définir __dirname dans un module ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
 
+// Activer CORS
+app.use(cors());
 
+app.get('/products/:id', function (req, res, next) {
+  res.json({ msg: 'This is CORS-enabled for all origins!' });
+});
 
-// view engine setup
+app.listen(80, function () {
+  console.log('CORS-enabled web server listening on port 80');
+});
+
+// Configuration du moteur de vues
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -24,20 +39,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
+// Gestion des erreurs 404
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Gestionnaire d'erreurs
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+  // définir les variables locales, uniquement fournir l'erreur en développement
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // afficher la page d'erreur
   res.status(err.status || 500);
   res.render('error');
 });
 
-module.exports = app;
+export default app;

@@ -1,10 +1,50 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
-import text from "@/text/text";
+
+interface Course {
+  id: string;
+  title: string;
+  is_finished: boolean;
+  chapter_id: number;
+  created_at: number;
+}
 
 export default function Learn() {
+  const [courses, setCourses] = useState<Course[] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/courses', {
+          headers: {
+            Accept: 'application/json',
+            method: "GET",
+            },
+        });
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) { 
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!courses || courses.length === 0) {
+    return <p>No courses available.</p>;
+  }
+
   return (
     <>
       <div className="relative flex flex-col items-center justify-center bg-light-blue rounded-lg mx-10 my-8 h-[650px]">
@@ -13,19 +53,21 @@ export default function Learn() {
         </div>
         <h1 className="absolute top-28 left-20 font-anekDeva text-3xl">Summary</h1>
         <div className="flex flex-col items-center justify-center bg-blue-500 rounded-lg p-6 text-center">
-          <Link href="/learn/1" className="cursor-pointer hover:text-white">
-            <div className="flex items-center justify-between w-full">
-              <h1 className="font-firaSans text-3xl px-4">Chapitre 1 :  {text.page.components.sommaire.chapter}</h1>
-              <FontAwesomeIcon 
-                icon={faCircleCheck}
-                width={26}
-                height={26}
-                color="green" 
-              />
-            </div>
-          </Link>
-          <p>Sous chapitre: {text.page.components.sommaire.sousChapitre}</p>
-          <p>Sous chapitre: {text.page.components.sommaire.sousChapitre2}</p>
+          {courses.map(course => (
+            <Link href={`/learn/${course.chapter_id}`} key={course.id} className="cursor-pointer hover:text-white">
+              <div className="flex items-center justify-between w-full">
+                <h1 className="font-firaSans text-3xl px-4">Chapitre {course.id}: {course.title}</h1>
+                {course.is_finished && (
+                  <FontAwesomeIcon 
+                    icon={faCircleCheck}
+                    width={26}
+                    height={26}
+                    color="green" 
+                  />
+                )}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </>
