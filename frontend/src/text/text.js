@@ -28,7 +28,11 @@ const appText = {
                     a: 'a',
                     b: 'b',
                     c: 'c',
-                }
+                },
+            },
+            homeCardsFullSection: {
+                title: "Why you should learn quantum computing?",
+                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor",
             }
             },
         },
