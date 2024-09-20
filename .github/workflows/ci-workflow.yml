@@ -50,6 +50,10 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
+
       - name: Lint the backend
         run: |
           cd backend
