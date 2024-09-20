@@ -49,25 +49,24 @@ export default function Learn() {
     <>
       <div className="relative flex flex-col items-center justify-center bg-light-blue rounded-lg mx-10 my-8 h-[650px]">
         <div className="absolute top-8 left-20">
-         {/* <button>← Back</button> */}
         </div>
         <h1 className="absolute top-28 left-20 font-anekDeva text-3xl">Summary</h1>
         <div className="flex flex-col items-center justify-center bg-blue-500 rounded-lg p-6 text-center">
-          {courses.map(course => (
-            <Link href={`/learn/${course.chapter_id}`} key={course.id} className="cursor-pointer hover:text-white">
-              <div className="flex items-center justify-between w-full">
-                <h1 className="font-firaSans text-3xl px-4">Chapitre {course.id}: {course.title}</h1>
-                {course.is_finished && (
-                  <FontAwesomeIcon 
-                    icon={faCircleCheck}
-                    width={26}
-                    height={26}
-                    color="green" 
-                  />
-                )}
-              </div>
-            </Link>
-          ))}
+        {courses.map(course => (
+  <div key={course.id} className="flex items-center justify-between w-full">
+   <Link href={`/learn/${course.chapter_id}`} className="cursor-pointer hover:text-white">
+      <h1 className="font-firaSans text-3xl px-4">Chapitre {course.id}: {course.title}</h1>
+      {course.is_finished && (
+        <FontAwesomeIcon 
+          icon={faCircleCheck}
+          width={26}
+          height={26}
+          color="green" 
+        />
+      )}
+    </Link>
+  </div>
+))}
         </div>
       </div>
     </>

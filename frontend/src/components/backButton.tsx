@@ -13,7 +13,7 @@ export default function BackButton() {
 
   return (
     <div className="">
-      <button onClick={handleBack} className="text-xl bg-red-500 font-normal text-black pb-4 pt-2">
+      <button onClick={handleBack} className="text-xl font-normal text-black pb-4 pt-2">
         ← Back
       </button>
     </div>
