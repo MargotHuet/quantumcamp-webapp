@@ -20,3 +20,8 @@ npm run lint
 cd backend 
 npm run lint
 
+## Tests
+J'utilise Jest pour les tests unitaires:
+
+cd frontend 
+npm run test
