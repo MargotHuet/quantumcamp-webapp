@@ -26,7 +26,7 @@ jobs:
       - name: Install front-end dependencies
         run: |
           cd frontend
-          npm ci
+          npm install
 
       - name: Lint the frontend
         run: |
@@ -48,9 +48,13 @@ jobs:
       - name: Set up Node.js for back-end
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
-          
-      - name: Install back-end dependencies
+          node-version: '18.17.0'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
+
+      - name: Lint the backend
         run: |
           cd backend
-          npm ci
+          npm run lint

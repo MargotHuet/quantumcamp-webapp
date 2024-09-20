@@ -20,7 +20,7 @@ const app = express();
 // Activer CORS
 app.use(cors());
 
-app.get('/products/:id', function (req, res, next) {
+app.get('/products/:id', function (req, res) {
   res.json({ msg: 'This is CORS-enabled for all origins!' });
 });
 
@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 });
 
 // Gestionnaire d'erreurs
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // définir les variables locales, uniquement fournir l'erreur en développement
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
