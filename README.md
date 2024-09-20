@@ -11,3 +11,12 @@ npm run dev
 cd backend 
 npm start
 
+## Linter
+J'utilise ESLint pour structurer le code:
+
+cd frontend
+npm run lint
+
+cd backend 
+npm run lint
+
