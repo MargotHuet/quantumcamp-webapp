@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 // GET full chapter
-router.get('/', async function(req, res, next) {
+router.get('/', async function(req, res) {
     let { data: chapter, error } = await supabase
       .from('chapters')
       .select('id, title');
@@ -14,7 +14,7 @@ router.get('/', async function(req, res, next) {
   });
   
   // GET chapter by Id
-  router.get('/:chapterId', async function(req, res, next) {
+  router.get('/:chapterId', async function(req, res) {
     const { chapterId } = req.params;
   
     let { data, error } = await supabase

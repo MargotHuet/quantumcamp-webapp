@@ -49,6 +49,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
+
+      - name: Lint the backend
+        run: |
+          cd backend
+          npm run lint
           
       - name: Install back-end dependencies
         run: |

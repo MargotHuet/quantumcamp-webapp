@@ -4,17 +4,17 @@ const router = express.Router();
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.send({ key: 'value' });
 });
 
 /* GET about page. */
-router.get('/about', function(req, res, next) {
+router.get('/about', function(req, res) {
   res.send({ key: 'value' });
 });
 
 /* GET courses title. */
-router.get('/courses', async function(req, res, next) {
+router.get('/courses', async function(req, res) {
   let { data: course, error } = await supabase
     .from('course')
     .select('*');
