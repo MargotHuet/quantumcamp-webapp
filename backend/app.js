@@ -12,6 +12,8 @@ const __dirname = path.dirname(__filename);
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import chaptersRouter from './routes/chapters.js';
+
 
 const app = express();
 
@@ -38,6 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/chapters', chaptersRouter);
+
 
 // Gestion des erreurs 404
 app.use(function(req, res, next) {

@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import BackButton from "@/components/backButton";
+import { useParams } from "next/navigation";
 
 interface Chapter {
   id: string;
@@ -8,8 +9,8 @@ interface Chapter {
   content: string;
 }
 
-export default function ChapterPage({ params }: { params: { chapterId: string } }) {
-  const { chapterId } = params;
+export default function ChapterPage() {
+  const { chapterId }= useParams();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,19 +18,19 @@ export default function ChapterPage({ params }: { params: { chapterId: string } 
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/courses/${chapterId}`, {
+        const response = await fetch(`http://localhost:5001/chapters/${chapterId}`, {
           headers: {
             Accept: 'application/json',
             method: "GET",
           },
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const data = await response.json();
-        console.log("Received data:", data);  // Log the received data
+        console.log("Received data:", data);  
         setChapter(data);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -39,7 +40,7 @@ export default function ChapterPage({ params }: { params: { chapterId: string } 
         setLoading(false);
       }
     };
-
+  
     fetchChapter();
   }, [chapterId]);
 
@@ -61,7 +62,7 @@ export default function ChapterPage({ params }: { params: { chapterId: string } 
         <div className="flex">
           <BackButton />
         </div>
-        <h1 className="text-3xl font-bold">Titre du chapitre: {chapter.title}</h1>
+        <h1 className="text-3xl font-bold">{chapter.title}</h1>
         <p>{chapter.content}</p>
       </div>
       <div id="2" className="flex flex-col bg-sky-500 w-2/5 flex items-center justify-center">
