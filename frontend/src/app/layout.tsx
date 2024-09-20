@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import '@/fontawesomeconfig';
-import ClientLayout from "@/components/ClientLayout"; // Nouveau composant pour gérer le rendu côté client
+import ClientLayout from "@/components/ClientLayout"; 
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Quantum Camp",
@@ -15,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body style={{ fontFamily: 'Inter, sans-serif' }}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
