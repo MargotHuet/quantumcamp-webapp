@@ -2,10 +2,10 @@
 FROM node:18
 
 # Créer le répertoire de travail dans le conteneur
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+COPY package.json package-lock.json* ./
 
 # Installer les dépendances
 RUN npm install
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exposer le port 5000 (ou celui que tu utilises)
-EXPOSE 5002
+EXPOSE 5001
 
 # Démarrer l'application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

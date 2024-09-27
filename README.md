@@ -32,3 +32,5 @@ Pour lancer le frontend avec Docker:
 docker run -p 3000:3000 quantumfrontend
 
 Pour lancer le backend avec Docker:
+docker run -p 5001:5001 quantumbackend
+
