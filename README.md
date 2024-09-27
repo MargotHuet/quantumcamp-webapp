@@ -25,3 +25,10 @@ J'utilise Jest pour les tests unitaires:
 
 cd frontend 
 npm run test
+
+
+## Docker
+Pour lancer le frontend avec Docker:
+docker run -p 3000:3000 quantumfrontend
+
+Pour lancer le backend avec Docker:
