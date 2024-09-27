@@ -18,7 +18,8 @@ export default function ChapterPage() {
   useEffect(() => {
     const fetchChapter = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/chapters/${chapterId}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/chapters/${chapterId}`, {
           headers: {
             Accept: 'application/json',
             method: "GET",
