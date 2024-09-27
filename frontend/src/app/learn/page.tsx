@@ -19,7 +19,8 @@ export default function Learn() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:5001/courses', {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/courses`, {
           headers: {
             Accept: 'application/json',
             method: "GET",

@@ -10,7 +10,7 @@ cd frontend
 ## Backend
 
 cd backend 
-`npm start`
+`npm run dev`
 
 ## Linter
 J'utilise ESLint pour structurer le code:
