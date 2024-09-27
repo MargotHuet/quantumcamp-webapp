@@ -30,7 +30,7 @@ cd frontend
 
 ## Docker
 Pour lancer le frontend avec Docker:
-`docker run -p 3000:3000 quantumfrontend`
+`docker run -p 3020:3020 quantumfrontend`
 
 Pour lancer le backend avec Docker:
 `docker run -p 5001:5001 quantumbackend`

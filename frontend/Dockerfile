@@ -13,8 +13,8 @@ RUN npm install
 # Copier tout le contenu du dossier frontend dans le conteneur
 COPY . .
 
-# Exposer le port 3000 (le port par défaut pour les applications Next.js en mode dev)
-EXPOSE 3000
+# Exposer le port 3001 (le port par défaut pour les applications Next.js en mode dev)
+EXPOSE 3020
 
 # Commande pour démarrer l'application en mode développement
 CMD ["npm", "run", "dev"]
