@@ -24,7 +24,7 @@ export default function Profile() {
             </>
           ) : (
             <>
-             <p>You must be logged in to see this page's content.</p> 
+             <p>You must be logged in to see this page&apos;'s content.</p> 
             </>
           )}
         </>
