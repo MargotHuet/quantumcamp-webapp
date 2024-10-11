@@ -1,10 +1,58 @@
-import React from "react";
+'use client';
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { supabase } from "../../../../shared/clientSupabase";
+import { useRouter } from "next/navigation";
+
+interface LoginData {
+    email: string;
+    password: string;
+}
 
 export default function Login() {
+    const router = useRouter();
+
+    const [ formData, setFormData ] = useState<LoginData>({
+        email: '',
+        password: ''
+    })
+
+    console.log(formData);
+
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value } = event.target;
+        setFormData((prevFormData: any) => ({
+            ...prevFormData,
+            [name]:value,
+        }));
+      }
+
+      async function handleSubmit(e: any) {
+        e.preventDefault();
+
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword(
+                {
+                    email: formData.email,
+                    password: formData.password,
+                }
+            )
+
+        if (error) throw error 
+            console.log(data);
+            alert('you are logged in');
+            router.push('/');
+        }
+
+        catch (error) {
+            alert(error);
+        }
+      }
+
     return (
         <>
+        <form onSubmit={handleSubmit}>
         <div className="flex h-screen">
             <div className="relative bg-blue-200 w-2/5">
                 <div className="absolute flex justify-start top-24">
@@ -28,13 +76,35 @@ export default function Login() {
                 </div>
                 <div className="absolute flex flex-col gap-4 justify-end top-72 left-44">
                     <label className="text-md font-firaSans">Email</label>
-                    <input className="bg-blue-200 w-80 h-10" type="text" required></input>
+                    <input 
+                        className="bg-blue-200 w-80 h-10" 
+                        type="text" 
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        value={formData.email}
+                        required>
+                    </input>
                     <label className="text-md font-firaSans">Password</label>
-                    <input className="bg-blue-200 w-80 h-10" type="password" required></input>
-                    <button className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 rounded-md">Login</button>
+                    <input 
+                        className="bg-blue-200 w-80 h-10" 
+                        type="password" 
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        value={formData.password}
+                        required>
+                    </input>
+                    <button 
+                        className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 rounded-md"
+                        type="submit"
+                    >
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
+        </form>
         </>
     )
 };
