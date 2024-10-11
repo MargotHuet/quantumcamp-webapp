@@ -35,6 +35,7 @@ jobs:
         run: |
           cd frontend
           npm install
+          npm install @supabase/supabase-js --save 
 
       - name: Lint the frontend
         run: |
