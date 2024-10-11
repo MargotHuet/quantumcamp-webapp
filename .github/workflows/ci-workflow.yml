@@ -22,11 +22,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.17.0'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
           
       - name: Install front-end dependencies
         run: |
           cd frontend
           npm install
+          npm install @supabase/supabase-js --save 
 
       - name: Lint the frontend
         run: |
@@ -39,6 +48,9 @@ jobs:
           npm run test
 
       - name: Build the frontend
+        env:
+            NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+            NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: |
           cd frontend
           npm run build
@@ -54,6 +66,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.17.0'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
