@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../../../shared/clientSupabase";
+import { supabase } from "../../../clientSupabase";
 import { Session } from "@supabase/supabase-js"; 
 
 
@@ -25,7 +25,7 @@ export default function Profile() {
           ) : (
             <>
              <p>You must be logged in to see this page&apos;s content.</p> 
-             
+
             </>
           )}
         </>

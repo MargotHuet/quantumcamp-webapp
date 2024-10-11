@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import data from "../data/data";
-import { supabase } from "../../../shared/clientSupabase";
+import { supabase } from "../../clientSupabase";
 import { Session } from "@supabase/supabase-js"; 
 
 export default function Navbar() {

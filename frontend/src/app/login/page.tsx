@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { supabase } from "../../../../shared/clientSupabase";
+import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
 
 interface LoginData {
