@@ -5,17 +5,17 @@ const appText = {
                 logo: "Quantum camp"
             },
             navigation: {
-                learn: "Learn",
-                pricing: "Pricing",
-                about: "About",
+                learn: "Apprendre",
+                pricing: "Tarifs",
+                about: "A propos",
                 contact: "Contact",
-                signup: "Sign up",
-                login: "Login",
+                signup: "Inscription",
+                login: "Connexion",
             },
             homePage: {
-                title: "Learn quantum computing",
-                description: "Quantum Camp is the place where you will learn quantum computing, either you are physisict, software engineer or curious people.",
-                button: "Get started",
+                title: "Apprenez l'informatique quantique.",
+                description: "Quantum Camp est The place où vous allez découvrir l'informatique quantique, que vous soyez ingénieur informatique ou simple curieux.",
+                button: "C'est parti",
                 
             },
             sommaire: {
@@ -23,15 +23,8 @@ const appText = {
                 sousChapitre: "lorem ipsum",
                 sousChapitre2: "lorem ipsum",
             },
-            learnPage: {
-                answer: {
-                    a: 'a',
-                    b: 'b',
-                    c: 'c',
-                },
-            },
             homeCardsFullSection: {
-                title: "Why you should learn quantum computing?",
+                title: "Pourquoi vous devriez apprendre l'informatique quantique?",
                 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor",
             }
             },
