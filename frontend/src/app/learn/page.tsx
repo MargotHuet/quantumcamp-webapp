@@ -24,7 +24,7 @@ export default function Learn() {
           headers: {
             Accept: 'application/json',
             method: "GET",
-            },
+          },
         });
         const data = await response.json();
         setCourses(data);
@@ -47,29 +47,27 @@ export default function Learn() {
   }
 
   return (
-    <>
-      <div className="relative flex flex-col items-center justify-center bg-light-blue rounded-lg mx-10 my-8 h-[650px]">
-        <div className="absolute top-8 left-20">
-        </div>
-        <h1 className="absolute top-28 left-20 font-anekDeva text-3xl">Summary</h1>
-        <div className="flex flex-col items-center justify-center bg-blue-500 rounded-lg p-6 text-center">
+    <div className="flex flex-col items-center justify-center px-4 py-8 md:px-10 md:py-12">
+      <h1 className="text-2xl md:text-4xl font-bold mb-6">Summary</h1>
+      <div className="flex flex-col w-full max-w-lg bg-blue-500 rounded-lg p-4 md:p-6 text-center">
         {courses.map(course => (
-  <div key={course.id} className="flex items-center justify-between w-full">
-   <Link href={`/learn/${course.chapter_id}`} className="cursor-pointer hover:text-white">
-      <h1 className="font-firaSans text-3xl px-4">Chapitre {course.id}: {course.title}</h1>
-      {course.is_finished && (
-        <FontAwesomeIcon 
-          icon={faCircleCheck}
-          width={26}
-          height={26}
-          color="green" 
-        />
-      )}
-    </Link>
-  </div>
-))}
-        </div>
+          <div key={course.id} className="flex flex-col md:flex-row items-center justify-between w-full mb-4 p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <Link href={`/learn/${course.chapter_id}`} className="w-full md:w-auto cursor-pointer">
+              <h2 className="text-lg md:text-2xl font-medium px-2">
+                Chapitre {course.id}: {course.title}
+              </h2>
+            </Link>
+            {course.is_finished && (
+              <FontAwesomeIcon 
+                icon={faCircleCheck}
+                width={24}
+                height={24}
+                className="text-green-500 mt-2 md:mt-0 md:ml-4"
+              />
+            )}
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }

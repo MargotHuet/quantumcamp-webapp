@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import BackButton from "@/components/backButton";
+import QuizSection from "@/components/QuizSection";
 import { useParams } from "next/navigation";
 
 interface Chapter {
@@ -10,7 +11,7 @@ interface Chapter {
 }
 
 export default function ChapterPage() {
-  const { chapterId }= useParams();
+  const { chapterId } = useParams();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,22 +59,22 @@ export default function ChapterPage() {
   }
 
   return (
-    <div className="flex h-screen">
-      <div id="1" className="flex flex-col items-center justify-center w-3/5 bg-sky-100">
-        <div className="flex">
+    <div className="flex flex-col md:flex-row h-screen">
+      <div
+        id="1"
+        className="flex flex-col items-center justify-center bg-sky-100 p-4 md:w-3/5 md:p-8"
+      >
+        <div className="w-full mb-4">
           <BackButton />
         </div>
-        <h1 className="text-3xl font-bold">{chapter.title}</h1>
-        <p>{chapter.content}</p>
+        <h1 className="text-xl md:text-3xl font-bold mb-4 text-center">{chapter.title}</h1>
+        <p className="text-sm md:text-base text-justify">{chapter.content}</p>
       </div>
-      <div id="2" className="flex flex-col bg-sky-500 w-2/5 flex items-center justify-center">
-        <h1>  </h1>
-        <a
-          className="border border-orange-300 text-center bg-orange-100 rounded-lg w-1/6 p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
-          href={""}
-        >
-          Submit
-        </a>
+      <div
+        id="2"
+        className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
+      >
+        <QuizSection chapterId={Number(chapterId)} />
       </div>
     </div>
   );
