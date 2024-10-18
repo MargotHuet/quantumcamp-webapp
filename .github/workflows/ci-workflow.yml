@@ -1,7 +1,9 @@
-name: CI Workflow
+name: CI/CD Workflow
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'frontend/**'
       - 'backend/**'
@@ -18,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Set up Node.js for front-end
+      - name: Set up Node.js for frontend
         uses: actions/setup-node@v4
         with:
           node-version: '18.17.0'
@@ -31,29 +33,34 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
           
-      - name: Install front-end dependencies
+      - name: Install frontend dependencies
         run: |
           cd frontend
           npm install
-          npm install @supabase/supabase-js --save 
 
-      - name: Lint the frontend
+      - name: Lint frontend
         run: |
           cd frontend
           npm run lint
 
-      - name: Run tests
+      - name: Run frontend tests
         run: |
           cd frontend
           npm run test
 
-      - name: Build the frontend
+      - name: Build frontend
         env:
-            NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-            NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: |
           cd frontend
           npm run build
+
+      - name: Deploy frontend
+        if: github.event_name == 'push'
+        run: |
+          docker-compose -f docker-compose.yml build frontend
+          docker-compose -f docker-compose.yml up -d frontend
 
   back-end:
     runs-on: ubuntu-latest
@@ -62,7 +69,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js for back-end
+      - name: Set up Node.js for backend
         uses: actions/setup-node@v4
         with:
           node-version: '18.17.0'
@@ -75,11 +82,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./backend
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
 
-      - name: Lint the backend
+      - name: Lint backend
         run: |
           cd backend
           npm run lint
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
+
+      - name: Deploy backend
+        if: github.event_name == 'push'
+        run: |
+          docker-compose -f docker-compose.yml build backend
+          docker-compose -f docker-compose.yml up -d backend
