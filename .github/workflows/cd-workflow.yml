@@ -28,5 +28,5 @@ jobs:
           port: 22
           script: |
             /home/debian/QuantumCamp/quantumcamp-webapp
-            docker-compose -f docker-compose.yml build
-            docker-compose -f docker-compose.yml up -d
+            docker-compose -f docker-compose.yaml build
+            docker-compose -f docker-compose.yaml up -d
