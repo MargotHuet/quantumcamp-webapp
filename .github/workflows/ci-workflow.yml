@@ -1,4 +1,4 @@
-name: CI/CD Workflow
+name: CI Workflow
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
       - 'backend/**'
 
 jobs:
-  front-end:
+  front-end:f
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     steps:
@@ -56,11 +56,6 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Deploy frontend
-        if: github.event_name == 'push'
-        run: |
-          docker-compose -f docker-compose.yml build frontend
-          docker-compose -f docker-compose.yml up -d frontend
 
   back-end:
     runs-on: ubuntu-latest
@@ -97,8 +92,3 @@ jobs:
           cd backend
           npm run build
 
-      - name: Deploy backend
-        if: github.event_name == 'push'
-        run: |
-          docker-compose -f docker-compose.yml build backend
-          docker-compose -f docker-compose.yml up -d backend

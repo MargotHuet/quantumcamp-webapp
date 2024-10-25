@@ -1,0 +1,36 @@
+name: CD Workflow
+
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+  pull-requests:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy application
+        uses: appleboy/ssh-action@master
+        with:
+          host: 188.165.238.74
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script: |
+            cd /Quantum/quantumcamp-webapp  
+            docker-compose -f docker-compose.yml build
+            docker-compose -f docker-compose.yml up -d
