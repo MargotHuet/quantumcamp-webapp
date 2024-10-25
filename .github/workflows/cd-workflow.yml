@@ -27,6 +27,6 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            /home/debian/QuantumCamp/quantumcamp-webapp
+            cd /home/debian/QuantumCamp/quantumcamp-webapp
             docker-compose -f docker-compose.yaml build
             docker-compose -f docker-compose.yaml up -d
