@@ -7,15 +7,10 @@ on:
     paths:
       - 'frontend/**'
       - 'backend/**'
-  pull-requests:
+  pull_request:
     paths:
       - 'frontend/**'
       - 'backend/**'
-
-on:
-  push:
-    branches:
-      - main
 
 jobs:
   deploy:
