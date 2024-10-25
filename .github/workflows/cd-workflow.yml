@@ -7,7 +7,7 @@ on:
     paths:
       - 'frontend/**'
       - 'backend/**'
-  pull-requests:
+  pull_request:
     paths:
       - 'frontend/**'
       - 'backend/**'
