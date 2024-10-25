@@ -23,9 +23,10 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: 188.165.238.74
+          username: debian
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            cd /Quantum/quantumcamp-webapp  
-            docker-compose -f docker-compose.yml build
-            docker-compose -f docker-compose.yml up -d
+            cd /home/debian/QuantumCamp/quantumcamp-webapp
+            docker-compose -f docker-compose.yaml build
+            docker-compose -f docker-compose.yaml up -d
