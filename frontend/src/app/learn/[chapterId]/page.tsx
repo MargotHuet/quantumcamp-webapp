@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "@/components/backButton";
 import QuizSection from "@/components/QuizSection";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface Chapter {
   id: string;
@@ -12,6 +12,7 @@ interface Chapter {
 
 export default function ChapterPage() {
   const { chapterId } = useParams();
+  const router = useRouter();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +75,8 @@ export default function ChapterPage() {
         id="2"
         className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
       >
-        <QuizSection chapterId={Number(chapterId)} />
+        {/* Pass `router` as a prop to `QuizSection` */}
+        <QuizSection chapterId={Number(chapterId)} router={router} />
       </div>
     </div>
   );
