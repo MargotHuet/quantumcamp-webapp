@@ -51,9 +51,9 @@ export default function Learn() {
       <h1 className="text-2xl md:text-4xl font-bold mb-6">Summary</h1>
       <div className="flex flex-col w-full max-w-lg bg-blue-500 rounded-lg p-4 md:p-6 text-center">
         {courses.map(course => (
-          <div key={course.id} className="flex flex-col md:flex-row items-center justify-between w-full mb-4 p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <div key={course.id} className="flex flex-col md:flex-row items-center justify-between w-full mb-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
             <Link href={`/learn/${course.chapter_id}`} className="w-full md:w-auto cursor-pointer">
-              <h2 className="text-lg md:text-2xl font-medium px-2">
+              <h2 className="text-lg md:text-2xl font-medium px-2x">
                 Chapitre {course.id}: {course.title}
               </h2>
             </Link>
