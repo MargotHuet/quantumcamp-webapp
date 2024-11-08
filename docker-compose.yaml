@@ -6,13 +6,13 @@ services:
     ports:
       - "3020:3020"
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.local
 
   backend:
     build: ./backend
     ports:
       - "5001:5001"
     env_file:
-      - ./backend/.env
+      - ./backend/.env.local
     depends_on:
       - frontend
