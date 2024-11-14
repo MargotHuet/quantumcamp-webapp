@@ -14,7 +14,7 @@ export default function BackButton() {
   return (
     <div className="">
       <button onClick={handleBack} className="text-xl font-normal text-black pb-4 pt-2">
-        ← Back
+        ← Retour
       </button>
     </div>
   );
