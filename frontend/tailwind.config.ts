@@ -21,6 +21,12 @@ const config: Config = {
       backgroundColor: {
         creamWhite: "#F8F7FF"
       },
+      screens: {
+        'mobile': '380px',
+        'tablet': '768px', 
+        'laptop': '1024px', 
+        'desktop': '1280px', 
+      },
     },
   },
   plugins: [],
