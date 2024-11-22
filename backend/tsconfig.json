@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["bin/**/*.ts", "app.ts", "routes/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

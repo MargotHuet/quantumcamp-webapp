@@ -5,14 +5,19 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
+import { Request, Response, NextFunction } from 'express';
 
 // Définir __dirname dans un module ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
-import chaptersRouter from './routes/chapters.js';
+import indexRouter from './routes/index';
+import usersRouter from './routes/users';
+import chaptersRouter from './routes/chapters';
+
+interface CustomError extends Error {
+  status?: number; 
+}
 
 
 const app = express();
@@ -22,10 +27,6 @@ app.use(cors());
 
 app.get('/products/:id', function (req, res) {
   res.json({ msg: 'This is CORS-enabled for all origins!' });
-});
-
-app.listen(80, function () {
-  console.log('CORS-enabled web server listening on port 80');
 });
 
 // Configuration du moteur de vues
@@ -44,12 +45,12 @@ app.use('/chapters', chaptersRouter);
 
 
 // Gestion des erreurs 404
-app.use(function(req, res, next) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
   next(createError(404));
 });
 
 // Gestionnaire d'erreurs
-app.use(function(err, req, res) {
+app.use(function (err: CustomError, req: Request, res: Response) {
   // définir les variables locales, uniquement fournir l'erreur en développement
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -58,5 +59,6 @@ app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 export default app;

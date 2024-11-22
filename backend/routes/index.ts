@@ -15,7 +15,7 @@ router.get('/about', function(req, res) {
 
 /* GET courses title. */
 router.get('/courses', async function(req, res) {
-  let { data: course, error } = await supabase
+  const { data: course, error } = await supabase
     .from('course')
     .select('*');
   if (error) {

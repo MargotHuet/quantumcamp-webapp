@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-// Utiliser `import` au lieu de `require`
-import app from '../app.js';
-import debugModule from 'debug';
+import app from '../app';
+import debugModule from 'debug'; // Debugging messages
 import http from 'http';
+import { AddressInfo } from 'net';
 
 const debug = debugModule('backend:server');
 
@@ -29,6 +29,15 @@ const server = http.createServer(app);
  */
 
 server.listen(port);
+server.on('error', (err: NodeJS.ErrnoException) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use. Trying another port...`);
+    server.listen(0); // Essaie un port aléatoire
+  } else {
+    throw err;
+  }
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -36,7 +45,7 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: string): number | string | false {
   const port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -56,7 +65,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: NodeJS.ErrnoException): void {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -86,8 +95,14 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
+  if (addr === null) {
+    console.error('Server address is null');
+    return;
+  }
+
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
+    : 'port ' + (addr as AddressInfo).port;
+
   debug('Listening on ' + bind);
 }

@@ -44,7 +44,8 @@ export default function Signup() {
             }
         }
       }
-    )
+      )
+    alert("Votre compte a été créer. Connectez-vous.")
   } catch (error) {
   console.log('Erreur')
   alert('check your mail box')

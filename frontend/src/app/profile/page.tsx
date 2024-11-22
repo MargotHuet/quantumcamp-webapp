@@ -9,7 +9,6 @@ interface UserData {
   email: string
 }
 
-
 export default function Profile() {
     const [session, setSession] = useState<Session | null>(null); 
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -46,12 +45,20 @@ export default function Profile() {
     if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+  
+        // Obtenir le token JWT de la session actuelle
+        const { data: { session } } = await supabase.auth.getSession();
+  
+        if (!session) {
+          throw new Error('Session missing or user not logged in');
+        }
+  
         const response = await fetch(`${apiUrl}/users/delete-user`, {
-          method: 'POST',
+          method: 'DELETE',
           headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ userId: session?.user.id })
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`, // Ajouter le token JWT
+          }
         });
   
         const data = await response.json();
@@ -68,6 +75,7 @@ export default function Profile() {
       }
     }
   };
+  
   
    
     return (
