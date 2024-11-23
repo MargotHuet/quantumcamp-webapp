@@ -20,7 +20,7 @@ export default function Learn() {
     const fetchCourses = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-        const response = await fetch(`${apiUrl}/courses`, {
+        const response = await fetch(`${apiUrl}/chapters/courses`, {
           headers: {
             Accept: 'application/json',
             method: "GET",
