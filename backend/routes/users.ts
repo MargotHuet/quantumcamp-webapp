@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
-//import deleteUser from './deleteUser.js';
 import { supabase } from '../clientSupabase';
-//import { supabaseAdmin } from '../backendSupabase.js'; // Si utilisé
+import { supabaseAdmin } from '../backendSupabase.js';
 const router = express.Router();
 
 interface SupabaseUser {
@@ -35,8 +34,8 @@ router.get('/', async (req: Request, res: Response): Promise<Response> => {
   }
 });
 
-// Route DELETE pour supprimer un utilisateur connecté
-router.delete('/delete-user', async (req: Request, res: Response): Promise<Response> => {
+// Route DELETE pour supprimer l'utilisateur connecté
+router.delete('/delete', async (req: Request, res: Response): Promise<Response> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
@@ -46,30 +45,27 @@ router.delete('/delete-user', async (req: Request, res: Response): Promise<Respo
     }
 
     // Obtenir l'utilisateur connecté via son token
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser(token);
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
 
     if (userError || !user) {
-      return res.status(401).json({ error: 'Unauthorized or session missing' });
+      return res.status(401).json({ error: 'Unauthorized or user not found' });
     }
 
     const userId = (user as SupabaseUser).id;
-    
 
-    // Supprimer l'utilisateur via l'Admin API
-    const { error: deleteUserError } = await supabase.auth.admin.deleteUser(userId);
+    // Supprimer l'utilisateur via Supabase Admin API
+    const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
-    if (deleteUserError) {
-      return res.status(400).json({ error: deleteUserError.message });
+    if (deleteError) {
+      return res.status(500).json({ error: deleteError.message });
     }
 
-    return res.status(200).json({ message: 'User and associated data deleted successfully' });
+    return res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 export default router;

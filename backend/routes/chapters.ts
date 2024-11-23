@@ -1,6 +1,17 @@
 import { supabase } from "../clientSupabase.js";
 import express from 'express';
 const router = express.Router();
+// GET courses title 
+router.get('/courses', async function(req, res) {
+  const { data: course, error } = await supabase
+    .from('course')
+    .select('*');
+  if (error) {
+    return res.status(500).send(error.message);
+  }
+  res.send(course);
+});
+
 
 // GET full chapter
 router.get('/', async function(req, res) {
@@ -13,8 +24,8 @@ router.get('/', async function(req, res) {
     res.send(chapter);
   });
   
-  // GET chapter by Id
-  router.get('/:chapterId', async function(req, res) {
+// GET chapter by Id
+router.get('/:chapterId', async function(req, res) {
     const { chapterId } = req.params;
   
     const { data, error } = await supabase
