@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
+import ForgotPassword from "@/components/forgotPassword";
 
 interface LoginData {
     email: string;
@@ -69,10 +70,10 @@ export default function Login() {
             <div className="relative w-3/5">
                 <div className="absolute flex flex-col gap-6 justify-end top-24 left-44">
                         <h1 className="flex text-lg font-firaSans">Welcome back !</h1>
-                        <p className="flex text-4xl font-firaSans">Join to your account</p>
+                        <p className="flex text-4xl font-firaSans">Connectez-vous</p>
                 </div>
                 <div className="absolute flex flex-col justify-end top-48 left-44">
-                        <p className="text-sm text-gray-600 font-anekDeva">Don&apos;t have an account?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Create your account</Link></p>
+                        <p className="text-sm text-gray-600 font-anekDeva">Vous n'avez pas de compte?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Créez le votre</Link></p>
                 </div>
                 <div className="absolute flex flex-col gap-4 justify-end top-72 left-44">
                     <label className="text-md font-firaSans">Email</label>
@@ -85,21 +86,22 @@ export default function Login() {
                         value={formData.email}
                         required>
                     </input>
-                    <label className="text-md font-firaSans">Password</label>
+                    <label className="text-md font-firaSans">Mot de passe</label>
                     <input 
                         className="bg-blue-200 w-80 h-10" 
                         type="password" 
                         name="password"
-                        placeholder="Password"
+                        placeholder="Mot de passe"
                         onChange={handleChange}
                         value={formData.password}
                         required>
                     </input>
+                    <ForgotPassword />
                     <button 
                         className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 rounded-md"
                         type="submit"
                     >
-                        Login
+                        Connexion
                     </button>
                 </div>
             </div>
