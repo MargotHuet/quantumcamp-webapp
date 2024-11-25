@@ -2,11 +2,10 @@
   "name": "backend",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development tsx ./bin/www.ts",
     "build": "tsc",
-    "start": "NODE_ENV=production node ./dist/bin/www.js",
+    "start": "NODE_ENV=production tsx ./dist/bin/www.js",
     "lint": "eslint './**/*.ts' 'bin/**/*.ts' 'app.ts'"
   },
   "dependencies": {

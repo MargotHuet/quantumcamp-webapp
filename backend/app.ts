@@ -11,9 +11,9 @@ import { Request, Response, NextFunction } from 'express';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
-import chaptersRouter from './routes/chapters';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import chaptersRouter from './routes/chapters.js';
 
 interface CustomError extends Error {
   status?: number; 

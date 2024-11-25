@@ -12,6 +12,6 @@
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["bin/**/*.ts", "app.ts", "routes/**/*.ts"],
+  "include": ["**/*.ts", "routes/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -8,9 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import express from 'express';
-//import deleteUser from './deleteUser.js';
-import { supabase } from '../clientSupabase';
-//import { supabaseAdmin } from '../backendSupabase.js'; // Si utilisé
+import { supabase } from '../clientSupabase.js';
+import { supabaseAdmin } from '../backendSupabase.js';
 const router = express.Router();
 // Route GET pour récupérer les informations d'un utilisateur connecté
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,8 +31,8 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }));
-// Route DELETE pour supprimer un utilisateur connecté
-router.delete('/delete-user', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// Route DELETE pour supprimer l'utilisateur connecté
+router.delete('/delete', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(' ')[1];
@@ -41,17 +40,17 @@ router.delete('/delete-user', (req, res) => __awaiter(void 0, void 0, void 0, fu
             return res.status(401).json({ error: 'Authorization header missing' });
         }
         // Obtenir l'utilisateur connecté via son token
-        const { data: { user }, error: userError, } = yield supabase.auth.getUser(token);
+        const { data: { user }, error: userError } = yield supabase.auth.getUser(token);
         if (userError || !user) {
-            return res.status(401).json({ error: 'Unauthorized or session missing' });
+            return res.status(401).json({ error: 'Unauthorized or user not found' });
         }
         const userId = user.id;
-        // Supprimer l'utilisateur via l'Admin API
-        const { error: deleteUserError } = yield supabase.auth.admin.deleteUser(userId);
-        if (deleteUserError) {
-            return res.status(400).json({ error: deleteUserError.message });
+        // Supprimer l'utilisateur via Supabase Admin API
+        const { error: deleteError } = yield supabaseAdmin.auth.admin.deleteUser(userId);
+        if (deleteError) {
+            return res.status(500).json({ error: deleteError.message });
         }
-        return res.status(200).json({ message: 'User and associated data deleted successfully' });
+        return res.status(200).json({ message: 'User deleted successfully' });
     }
     catch (error) {
         console.error(error);

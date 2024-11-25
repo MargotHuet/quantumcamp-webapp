@@ -13,6 +13,9 @@ RUN npm install
 # Copier le reste du code source
 COPY . .
 
+# Transpiler le code TypeScript en JavaScript
+RUN npx tsc
+
 # Exposer le port 5000 (ou celui que tu utilises)
 EXPOSE 5001
 

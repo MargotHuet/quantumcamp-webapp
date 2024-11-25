@@ -10,6 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { supabase } from "../clientSupabase.js";
 import express from 'express';
 const router = express.Router();
+// GET courses title 
+router.get('/courses', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { data: course, error } = yield supabase
+            .from('course')
+            .select('*');
+        if (error) {
+            return res.status(500).send(error.message);
+        }
+        res.send(course);
+    });
+});
 // GET full chapter
 router.get('/', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {

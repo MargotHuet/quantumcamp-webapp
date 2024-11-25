@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app from '../app';
+import app from '../app.js';
 import debugModule from 'debug'; // Debugging messages
 import http from 'http';
 import { AddressInfo } from 'net';

@@ -8,9 +8,9 @@ import { fileURLToPath } from 'url';
 // Définir __dirname dans un module ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
-import chaptersRouter from './routes/chapters';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import chaptersRouter from './routes/chapters.js';
 const app = express();
 // Activer CORS
 app.use(cors());
