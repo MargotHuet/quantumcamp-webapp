@@ -4,7 +4,7 @@ import React from "react";
 export default function ForgotPassword() {
     return(
         <>
-            <div className="bg-red-500">
+            <div className="text-sm">
                 <Link href="/">Mot de passe oublié?</Link>
             </div>
         </>
