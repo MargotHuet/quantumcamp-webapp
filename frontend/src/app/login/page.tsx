@@ -73,7 +73,7 @@ export default function Login() {
                         <p className="flex text-4xl font-firaSans">Connectez-vous</p>
                 </div>
                 <div className="absolute flex flex-col justify-end top-48 left-44">
-                        <p className="text-sm text-gray-600 font-anekDeva">Vous n'avez pas de compte?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Créez le votre</Link></p>
+                        <p className="text-sm text-gray-600 font-anekDeva">Vous n&apos;avez pas de compte?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Créez le votre</Link></p>
                 </div>
                 <div className="absolute flex flex-col gap-4 justify-end top-72 left-44">
                     <label className="text-md font-firaSans">Email</label>
