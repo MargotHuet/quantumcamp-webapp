@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../clientSupabase";
 import { Session } from "@supabase/supabase-js"; 
+import UpdatePasswordPage from "../updatePassword/page";
 
 interface UserData {
   name: string;
@@ -107,6 +108,7 @@ export default function Profile() {
           <div className="mx-auto bg-blue-500 p-4 rounded-lg shadow-lg space-y-8">
             <p>Nom : {userData?.name}</p>
             <p>Email : {userData?.email}</p>
+            <UpdatePasswordPage />
             <button
               onClick={handleDeleteAccount}
               className="border border-orange-300 bg-orange-100 rounded-lg w-40 p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"

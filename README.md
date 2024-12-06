@@ -36,4 +36,4 @@ Pour lancer le backend avec Docker:
 `docker run -p 5001:5001 quantumbackend`
 
 Pour lancer Docker avec docker compose:
-`docker-compose up --build`
+`docker compose up --build`

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; 
 import { supabase } from "../../../clientSupabase";
 
 interface FormData {
@@ -12,15 +13,27 @@ interface FormData {
 }
 
 export default function Signup() {
-
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     password: '',
     confirmPassword: ''
-  })
+  });
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
-  console.log(formData)
+  // Fonction pour évaluer la force du mot de passe
+  function evaluatePasswordStrength(password: string) {
+    let strength = 0;
+
+    if (password.length >= 12) strength += 1; // Longueur minimale
+    if (/[A-Z]/.test(password)) strength += 1; // Une majuscule
+    if (/[a-z]/.test(password)) strength += 1; // Une minuscule
+    if (/\d/.test(password)) strength += 1; // Un chiffre
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1; // Un caractère spécial
+
+    setPasswordStrength(strength);
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -28,10 +41,24 @@ export default function Signup() {
         ...prevFormData,
         [name]:value,
     }));
+
+    if (name === "password") {
+      evaluatePasswordStrength(value);
+    }
   }
 
   async function handleSubmit(e: any) {
-    e.preventDefault()
+    e.preventDefault();
+
+    if (passwordStrength < 5) {
+      alert("Le mot de passe ne respecte pas les règles de sécurité.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Les mots de passe ne correspondent pas.");
+      return;
+    }
 
     try {
       const { data, error } = await supabase.auth.signUp(
@@ -40,15 +67,39 @@ export default function Signup() {
           password: formData.password,
           options: {
             data: {
-              name: formData.name
-            }
+              name: formData.name,
+            },
+          },
         }
+      );
+
+      if (error) {
+        if (error.message === "User already registered") {
+          alert("L'adresse email est déjà utilisée. Veuillez en choisir une autre.");
+        } else {
+          alert("Une erreur est survenue : " + error.message);
+        }
+        return;
       }
-      )
-    alert("Votre compte a été créer. Connectez-vous.")
-  } catch (error) {
-  console.log('Erreur')
-  alert('check your mail box')
+
+      alert("Votre compte a été créé. Connectez-vous.");
+      router.push("/login");
+    } catch (error: any) {
+      console.log("Erreur", error.message);
+      alert("Une erreur est survenue : " + error.message);
+    }
+}
+
+  // Obtenir la couleur de la jauge
+  function getStrengthColor() {
+    switch (passwordStrength) {
+      case 0: return "bg-gray-200";
+      case 1: return "bg-red-500";
+      case 2: return "bg-orange-500";
+      case 3: return "bg-yellow-400";
+      case 4: return "bg-blue-500";
+      case 5: return "bg-green-500";
+      default: return "bg-gray-200";
     }
   }
 
@@ -70,22 +121,21 @@ export default function Signup() {
         </div>
         <div className="relative w-3/5">
           <div className="absolute flex flex-col gap-6 justify-end top-24 left-44">
-            <h1 className="flex text-lg font-firaSans">Welcome!</h1>
-            <p className="flex text-4xl font-firaSans">Create your account</p>
+            <p className="flex text-4xl font-firaSans">Créez votre compte</p>
           </div>
-          <div className="absolute flex flex-col justify-end top-48 left-44">
+          <div className="absolute flex flex-col justify-end top-36 left-44">
             <p className="text-sm text-gray-600 font-anekDeva">
-              Already have an account?
-              <Link href={"/login"} className="font-anekDeva text-blue-500 font-bold"> Login</Link>
+              Vous avez déjà un compte?
+              <Link href={"/login"} className="font-anekDeva text-blue-500 px-2 font-bold">Connexion</Link>
             </p>
           </div>
-          <div className="absolute flex flex-col gap-4 justify-end top-64 left-44">
-            <label className="text-md font-firaSans">Your name</label>
+          <div className="absolute flex flex-col gap-2 justify-end top-52 left-44">
+            <label className="text-md font-firaSans">Prénom</label>
             <input
               className="bg-blue-200 w-80 h-10"
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Prénom"
               onChange={handleChange}
               value={formData.name}
               required
@@ -100,31 +150,60 @@ export default function Signup() {
               value={formData.email}
               required
             />
-            <label className="text-md font-firaSans">Password</label>
+            <label className="text-md font-firaSans">Mot de passe</label>
             <input
               className="bg-blue-200 w-80 h-10"
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Mot de passe"
               onChange={handleChange}
               value={formData.password}
               required
             />
-            <label className="text-md font-firaSans">Confirm your password</label>
+            {/* Jauge de force du mot de passe */}
+            <div className="w-80 h-2 mt-2 rounded-md bg-gray-200">
+                <div
+                  className={`h-2 rounded-md transition-all ${getStrengthColor()}`}
+                  style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-600 mt-1">
+                Force : {["Très faible", "Faible", "Moyenne", "Bonne", "Très bonne"][passwordStrength]}
+              </p>
+            <label className="text-md font-firaSans mt-2">Confirmez votre mot de passe</label>
             <input
               className="bg-blue-200 w-80 h-10"
               type="password"
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder="Confirmez votre mot de passe"
               onChange={handleChange}
               value={formData.confirmPassword}
               required
             />
+            <div className="flex items-start mt-2">
+            <input 
+              className="mt-1"
+              type="checkbox"
+              id="terms"
+              required
+            />
+            <label htmlFor="terms" className="text-sm ml-2">
+              En vous inscrivant, vous acceptez les{" "} <br/>
+            <Link
+              href="/cgu"
+              className="text-blue-500 underline"
+              target="_blank" 
+              rel="noopener noreferrer" 
+            >
+              conditions générales d&apos;utilisation
+            </Link>.
+            </label>
+            </div>
             <button
-              className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 rounded-md"
+              className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 mt-4 rounded-md"
               type="submit"
             >
-              Sign up
+              Inscription
             </button>
           </div>
         </div>

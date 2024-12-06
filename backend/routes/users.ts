@@ -34,6 +34,51 @@ router.get('/', async (req: Request, res: Response): Promise<Response> => {
   }
 });
 
+// Route pour envoyer un mail en cas de mot de passe oublié
+router.post('/forgot-password', async (req: Request, res: Response) => {
+  const { email } = req.body;
+  if(!email){
+    return res.status(400).json({error: 'Email is required.'})
+  }
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+
+    if(error) {
+      res.status(400).json({error: error.message});
+    }
+
+    res.status(200).json({ message: 'Password reset email send.'})
+  } catch(err) {
+    console.log(err)
+    res.status(500).json({error: 'An error occured during your request.'})
+  }
+})
+
+// Route pour mettre à jour le mot de passe
+router.post('/request-password-reset', async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required.' });
+  }
+
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://188.165.238.74:3020/updatePassword',
+    });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.status(200).json({ message: 'Password reset email sent successfully.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while sending the reset email.' });
+  }
+});
+
+
 // Route DELETE pour supprimer l'utilisateur connecté
 router.delete('/delete', async (req: Request, res: Response): Promise<Response> => {
   try {

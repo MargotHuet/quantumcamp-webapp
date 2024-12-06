@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
-import ForgotPassword from "@/components/forgotPassword";
+//import ForgotPassword from "@/components/forgotPassword";
 
 interface LoginData {
     email: string;
@@ -75,7 +75,7 @@ export default function Login() {
                 <div className="absolute flex flex-col justify-end top-48 left-44">
                         <p className="text-sm text-gray-600 font-anekDeva">Vous n&apos;avez pas de compte?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Créez le votre</Link></p>
                 </div>
-                <div className="absolute flex flex-col gap-4 justify-end top-72 left-44">
+                <div className="absolute flex flex-col gap-2 justify-end top-72 left-44">
                     <label className="text-md font-firaSans">Email</label>
                     <input 
                         className="bg-blue-200 w-80 h-10" 
@@ -96,9 +96,11 @@ export default function Login() {
                         value={formData.password}
                         required>
                     </input>
-                    <ForgotPassword />
+                    <div className="text-xs font-anekDeva text-blue-500">
+                        <Link href="/forgotPassword">Mot de passe oublié?</Link>
+                    </div>
                     <button 
-                        className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 rounded-md"
+                        className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 mt-2 rounded-md"
                         type="submit"
                     >
                         Connexion

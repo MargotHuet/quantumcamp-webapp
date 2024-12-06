@@ -3,11 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import data from "../data/data";
 import { supabase } from "../../clientSupabase";
-import { Session } from "@supabase/supabase-js"; 
+import { Session } from "@supabase/supabase-js";
 
 export default function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [session, setSession] = useState<Session | null>(null); 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     const getSession = async () => {
@@ -25,22 +25,21 @@ export default function Navbar() {
     return () => subscription.unsubscribe(); // Nettoyage du listener quand le composant est démonté
   }, []);
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    };
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
-    const closeMenu = () => {
-        setMenuOpen(false);
-    };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null); // Mise à jour de l'état après déconnexion
+    closeMenu();
+  };
 
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        setSession(null); // Mise à jour de l'état après déconnexion
-        closeMenu();
-      };
-
-    return (
+  return (
     <div className="relative flex items-center justify-between h-16 border-b-2 py-6 px-6 w-full md:w-4/5 lg:w-3/4 mx-auto">
       <div className="flex items-center">
         <Link href="/">
@@ -65,9 +64,9 @@ export default function Navbar() {
           {data.navigation.map((item, index) => (
             <Link
               key={`nav-${index}`}
-              href={`${item.href}`}
-              className="px-4 py-2 text-black cursor-pointer" 
-              onClick={closeMenu}     
+              href={`/${item.href}`}
+              className="px-4 py-2 text-black cursor-pointer"
+              onClick={closeMenu}
             >
               {item.label}
             </Link>
@@ -77,24 +76,30 @@ export default function Navbar() {
           {session ? (
             <>
               <Link href="/profile" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
-                Profile
+                Profil
               </Link>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 border border-red-500 bg-red-100 text-black rounded-lg hover:bg-red-200"
               >
-                Logout
+                Déconnexion
               </button>
             </>
           ) : (
-            <>
-              <Link href="/login" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
-                Login
+            data.account.map((item, index) => (
+              <Link
+                key={`account-${index}`}
+                href={`/${item.href}`}
+                className={`px-4 py-2 ${
+                  item.href === "signup"
+                    ? "border border-sky-500 bg-blue-100 text-black rounded-lg hover:bg-blue-200 hover:border-sky-600 hover:text-white"
+                    : "text-black"
+                } cursor-pointer`}
+                onClick={closeMenu}
+              >
+                {item.label}
               </Link>
-              <Link href="/signup" className="px-4 py-2 border border-sky-500 bg-blue-100 text-black rounded-lg hover:bg-blue-200 hover:border-sky-600 hover:text-white" onClick={closeMenu}>
-                Signup
-              </Link>
-            </>
+            ))
           )}
         </div>
       </div>
