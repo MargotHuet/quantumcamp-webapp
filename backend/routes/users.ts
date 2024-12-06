@@ -37,11 +37,11 @@ router.get('/', async (req: Request, res: Response): Promise<Response> => {
 // Route pour envoyer un mail en cas de mot de passe oublié
 router.post('/forgot-password', async (req: Request, res: Response) => {
   const { email } = req.body;
-  if(!email) {
+  if(!email){
     return res.status(400).json({error: 'Email is required.'})
   }
   try {
-    let { error } = await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
 
     if(error) {
       res.status(400).json({error: error.message});
@@ -63,7 +63,7 @@ router.post('/request-password-reset', async (req: Request, res: Response) => {
   }
 
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'http://188.165.238.74:3020/updatePassword',
     });
 

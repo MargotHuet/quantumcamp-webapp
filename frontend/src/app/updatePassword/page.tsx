@@ -57,7 +57,7 @@ export default function UpdatePasswordPage() {
       {error && (
         <div>
           <p style={{ color: 'red' }}>{error}</p>
-          <button onClick={() => router.push('/')}>Retour à l'accueil</button>
+          <button onClick={() => router.push('/')}>Retour à l&apos;accueil</button>
         </div>
       )}
       {!error && (

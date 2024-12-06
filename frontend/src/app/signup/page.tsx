@@ -195,7 +195,7 @@ export default function Signup() {
               target="_blank" 
               rel="noopener noreferrer" 
             >
-              conditions générales d'utilisation
+              conditions générales d&apos;utilisation
             </Link>.
             </label>
             </div>
