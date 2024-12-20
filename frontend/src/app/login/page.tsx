@@ -19,8 +19,6 @@ export default function Login() {
         password: ''
     })
 
-    console.log(formData);
-
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
         setFormData((prevFormData: any) => ({
@@ -42,8 +40,7 @@ export default function Login() {
 
         if (error) throw error 
             console.log(data);
-            alert('you are logged in');
-            router.push('/');
+            router.push('/profile');
         }
 
         catch (error) {

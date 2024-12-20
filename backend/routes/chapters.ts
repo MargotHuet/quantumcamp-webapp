@@ -4,7 +4,7 @@ const router = express.Router();
 // GET courses title 
 router.get('/courses', async function(req, res) {
   const { data: course, error } = await supabase
-    .from('course')
+    .from('courses')
     .select('*');
   if (error) {
     return res.status(500).send(error.message);
@@ -46,5 +46,26 @@ router.get('/:chapterId', async function(req, res) {
   
     res.json(data[0]);  // retourne le premier (et unique) chapitre correspondant
   });
+
+// GET answers by chapterId
+router.get('/answers/:chapterId', async  function(req, res) {
+  const { chapterId } = req.params;
+
+  const { data, error } = await supabase
+    .from('answers')
+    .select('id, possible_answer, is_correct')
+    .eq('chapter_id', chapterId);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ error: "No answers found for this chapter" });
+  }
+
+  res.json(data);
+});
+
 
 export default router;

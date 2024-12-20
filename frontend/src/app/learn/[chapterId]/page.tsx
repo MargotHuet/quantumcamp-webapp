@@ -24,8 +24,8 @@ export default function ChapterPage() {
         const response = await fetch(`${apiUrl}/chapters/${chapterId}`, {
           headers: {
             Accept: 'application/json',
-            method: "GET",
           },
+          method: "GET",
         });
   
         if (!response.ok) {
@@ -76,7 +76,7 @@ export default function ChapterPage() {
         className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
       >
         {/* Pass `router` as a prop to `QuizSection` */}
-        <QuizSection chapterId={Number(chapterId)} router={router} />
+        <QuizSection chapterId={Number(chapterId)} />
       </div>
     </div>
   );

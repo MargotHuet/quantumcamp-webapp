@@ -4,10 +4,12 @@ import Image from "next/image";
 import data from "../data/data";
 import { supabase } from "../../clientSupabase";
 import { Session } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const getSession = async () => {
@@ -37,6 +39,7 @@ export default function Navbar() {
     await supabase.auth.signOut();
     setSession(null); // Mise à jour de l'état après déconnexion
     closeMenu();
+    router.push('/login');
   };
 
   return (

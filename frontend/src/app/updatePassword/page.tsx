@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../clientSupabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function UpdatePasswordPage() {
@@ -17,16 +16,24 @@ export default function UpdatePasswordPage() {
 
       if (!accessToken || !refreshToken) {
         setError('Le lien est invalide ou expiré. Veuillez demander une nouvelle réinitialisation.');
-        return; // Pas de redirection immédiate
+        return;
       }
 
-      const { error } = await supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/users/verify-token`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ accessToken, refreshToken }),
+        });
 
-      if (error) {
-        setError('Impossible de valider la session. Veuillez réessayer.');
+        if (!response.ok) {
+          throw new Error('Impossible de valider la session. Veuillez réessayer.');
+        }
+
+        setMessage('Token vérifié. Vous pouvez mettre à jour votre mot de passe.');
+      } catch (err: any) {
+        setError(err.message || 'Une erreur est survenue.');
       }
     };
 
@@ -35,12 +42,16 @@ export default function UpdatePasswordPage() {
 
   const handlePasswordUpdate = async () => {
     try {
-      const { error } = await supabase.auth.updateUser({
-        password,
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      const response = await fetch(`${apiUrl}/users/update-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
       });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Une erreur est survenue lors de la mise à jour du mot de passe.');
       }
 
       setMessage('Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.');

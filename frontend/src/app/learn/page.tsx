@@ -23,8 +23,8 @@ export default function Learn() {
         const response = await fetch(`${apiUrl}/chapters/courses`, {
           headers: {
             Accept: 'application/json',
-            method: "GET",
           },
+          method: "GET",
         });
         const data = await response.json();
         setCourses(data);
@@ -54,7 +54,7 @@ export default function Learn() {
           <div key={course.id} className="flex flex-col md:flex-row items-center justify-between w-full mb-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
             <Link href={`/learn/${course.chapter_id}`} className="w-full md:w-auto cursor-pointer">
               <h2 className="text-lg md:text-2xl font-medium px-2x">
-                Chapitre {course.id}: {course.title}
+              {course.title}
               </h2>
             </Link>
             {course.is_finished && (

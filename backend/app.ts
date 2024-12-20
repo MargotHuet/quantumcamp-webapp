@@ -14,16 +14,20 @@ const __dirname = path.dirname(__filename);
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
+import answersRouter from './routes/answers.js';
 
 interface CustomError extends Error {
   status?: number; 
 }
 
-
 const app = express();
 
 // Activer CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3020', // Frontend
+  credentials: true,              // Autorise les cookies et les informations d'authentification
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+}));
 
 app.get('/products/:id', function (req, res) {
   res.json({ msg: 'This is CORS-enabled for all origins!' });
@@ -42,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
+app.use('/answers', answersRouter);
 
 
 // Gestion des erreurs 404
