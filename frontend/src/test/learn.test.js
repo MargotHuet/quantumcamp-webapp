@@ -33,8 +33,8 @@ describe('Learn Component', () => {
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
     
     // Check if the courses are rendered
-    expect(screen.getByText('Chapitre 1: Course 1')).toBeInTheDocument();
-    expect(screen.getByText('Chapitre 2: Course 2')).toBeInTheDocument();
+    expect(screen.getByText('Course 1')).toBeInTheDocument();
+    expect(screen.getByText('Course 2')).toBeInTheDocument();
   });
 
   test('displays No courses available if no courses are fetched', async () => {
