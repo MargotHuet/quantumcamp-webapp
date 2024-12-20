@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/courses', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { data: course, error } = yield supabase
-            .from('course')
+            .from('courses')
             .select('*');
         if (error) {
             return res.status(500).send(error.message);
@@ -52,6 +52,23 @@ router.get('/:chapterId', function (req, res) {
             return res.status(404).json({ error: "Chapter not found" });
         }
         res.json(data[0]); // retourne le premier (et unique) chapitre correspondant
+    });
+});
+// GET answers by chapterId
+router.get('/answers/:chapterId', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { chapterId } = req.params;
+        const { data, error } = yield supabase
+            .from('answers')
+            .select('id, possible_answer, is_correct')
+            .eq('chapter_id', chapterId);
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+        if (!data || data.length === 0) {
+            return res.status(404).json({ error: "No answers found for this chapter" });
+        }
+        res.json(data);
     });
 });
 export default router;

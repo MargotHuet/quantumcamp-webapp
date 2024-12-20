@@ -1,155 +1,100 @@
 'use client';
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../clientSupabase";
-import { useRouter } from 'next/router';
 
-interface Choice {
-    text: string;
+interface Answer {
+  id: number;
+  possible_answer: string;
+  is_correct: boolean;
 }
 
 interface Quiz {
-    question: string;
-    choices: Choice[];
-    correct_answer_id: number;
+  question: string;
+  answers: Answer[];
 }
 
-export default function QuizSection({ chapterId, router }: { chapterId: number, router: any }) {
-    const [quiz, setQuiz] = useState<Quiz | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(null);
-    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-    const [showNextButton, setShowNextButton] = useState<boolean>(false);
+export default function QuizSection({ chapterId }: { chapterId: number }) {
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchQuizForChapter = async () => {
-            try {
-                setQuiz(null);
-                setLoading(true);
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      try {
+        setLoading(true);
 
-                const { data: chapterData, error: chapterError } = await supabase
-                    .from('chapters')
-                    .select('quiz_id')
-                    .eq('id', chapterId)
-                    .single();
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-                if (chapterError) throw new Error(chapterError.message);
-                if (!chapterData || !chapterData.quiz_id) throw new Error("No quiz associated with this chapter.");
+        // Étape 1 : Récupérer la question depuis la table `chapters`
+        const chapterResponse = await fetch(`${apiUrl}/chapters/${chapterId}`, {
+          headers: {
+            Accept: "application/json",
+          },
+        });
 
-                const quizId = chapterData.quiz_id;
-
-                const { data: quizData, error: quizError } = await supabase
-                    .from('quiz')
-                    .select(`
-                        question,
-                        choices,
-                        correct_answer_id
-                    `)
-                    .eq('id', quizId)
-                    .single();
-
-                if (quizError) throw new Error(quizError.message);
-
-                let parsedChoices;
-                try {
-                    parsedChoices = Array.isArray(quizData.choices)
-                        ? quizData.choices
-                        : JSON.parse(quizData.choices);
-                } catch (parseError) {
-                    setError("Les choix ne sont pas au format attendu.");
-                    return;
-                }
-
-                setQuiz({
-                    question: quizData.question,
-                    choices: parsedChoices,
-                    correct_answer_id: quizData.correct_answer_id,
-                });
-            } catch (error) {
-                setError(error instanceof Error ? error.message : String(error));
-                setQuiz(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchQuizForChapter();
-    }, [chapterId]);
-
-    const handleNext = () => {
-        if (selectedChoiceIndex !== null && quiz) {
-            const isAnswerCorrect = selectedChoiceIndex === quiz.correct_answer_id;
-            setIsCorrect(isAnswerCorrect);
-            if (isAnswerCorrect) {
-                setShowNextButton(true);
-            }
+        if (!chapterResponse.ok) {
+          throw new Error(`Failed to fetch chapter: ${chapterResponse.statusText}`);
         }
+
+        const chapterData = await chapterResponse.json();
+
+        // Étape 2 : Récupérer les réponses depuis la table `answers`
+        const answersResponse = await fetch(`${apiUrl}/chapters/answers/${chapterId}`, {
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!answersResponse.ok) {
+          throw new Error(`Failed to fetch answers: ${answersResponse.statusText}`);
+        }
+
+        const answersData = await answersResponse.json();
+
+        setQuiz({
+          question: chapterData.question,
+          answers: answersData,
+        });
+      } catch (error) {
+        setError(error instanceof Error ? error.message : String(error));
+        setQuiz(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleNextQuiz = () => {
-        const nextChapterId = chapterId + 1;
-        router.push(`/learn/${nextChapterId}`);
-    };
+    fetchQuizData();
+  }, [chapterId]);
 
-    if (loading) {
-        return <p className="text-center">Chargement...</p>;
-    }
+  if (loading) {
+    return <p className="text-center">Chargement...</p>;
+  }
 
-    if (error) {
-        return <p className="text-center text-red-500">{error}</p>;
-    }
+  if (error) {
+    return <p className="text-center text-red-500">{error}</p>;
+  }
 
-    if (!quiz) {
-        return <p className="text-center">Aucun quiz disponible pour ce chapitre.</p>;
-    }
+  if (!quiz) {
+    return <p className="text-center">Aucun quiz disponible pour ce chapitre.</p>;
+  }
 
-    return (
-        <div className="flex flex-col justify-center items-center p-4 mb-24">
-            <div className="bg-white rounded-md shadow-lg w-full max-w-md">
-                <h1 className="bg-blue-700 text-white px-4 py-3 font-bold rounded-t-md text-center">
-                    {quiz.question}
-                </h1>
-                <ul className="flex flex-col gap-3 mt-4 p-4">
-                    {quiz.choices.map((choice, index) => (
-                        <li key={index} className="flex items-center">
-                            <button
-                                onClick={() => setSelectedChoiceIndex(index)}
-                                className={`w-full rounded-lg p-3 transition-all duration-200 text-center
-                                    ${
-                                        isCorrect !== null
-                                            ? index === quiz.correct_answer_id
-                                                ? "bg-green-500 text-white"
-                                                : selectedChoiceIndex === index && !isCorrect
-                                                ? "bg-red-500 text-white"
-                                                : "bg-gray-100"
-                                            : selectedChoiceIndex === index
-                                            ? "bg-gray-400 text-white"
-                                            : "bg-gray-100 hover:bg-gray-200"
-                                    }
-                                `}
-                            >
-                                {choice.text}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="flex mt-4 space-x-4">
-                <button
-                    onClick={handleNext}
-                    className="border border-orange-300 bg-orange-100 rounded-lg w-40 p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
-                >
-                    Valider
-                </button>
-                {showNextButton && (
-                    <button
-                        onClick={handleNextQuiz}
-                        className="border border-blue-500 bg-blue-100 rounded-lg w-40 p-2 hover:bg-blue-200 hover:border-blue-600 hover:text-white"
-                    >
-                        Suivant
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex flex-col justify-center items-center p-4 mb-24">
+      <div className="bg-white rounded-md shadow-lg w-full max-w-md">
+        <h1 className="bg-blue-700 text-white px-4 py-3 font-bold rounded-t-md text-center">
+          {quiz.question}
+        </h1>
+        <ul className="flex flex-col gap-3 mt-4 p-4">
+          {quiz.answers.map((answer) => (
+            <li key={answer.id} className="flex items-center">
+              <button
+                className="w-full rounded-lg p-3 bg-gray-100 hover:bg-gray-200 transition-all duration-200 text-center"
+              >
+                {answer.possible_answer}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
