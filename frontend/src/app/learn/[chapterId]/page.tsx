@@ -76,7 +76,7 @@ export default function ChapterPage() {
         className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
       >
         {/* Pass `router` as a prop to `QuizSection` */}
-        <QuizSection chapterId={Number(chapterId)} />
+        <QuizSection chapterId={String(chapterId)} />
       </div>
     </div>
   );

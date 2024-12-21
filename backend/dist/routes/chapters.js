@@ -8,67 +8,58 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { supabase } from "../clientSupabase.js";
-import express from 'express';
+import express from "express";
 const router = express.Router();
-// GET courses title 
+// GET courses title
+const coursesQuery = supabase
+    .from("courses")
+    .select("*");
 router.get('/courses', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { data: course, error } = yield supabase
-            .from('courses')
-            .select('*');
+        const { data, error } = yield coursesQuery;
         if (error) {
-            return res.status(500).send(error.message);
+            res.status(500).send(error.message);
+            return;
         }
-        res.send(course);
+        res.json(data);
     });
 });
 // GET full chapter
+const chaptersQuery = supabase
+    .from("chapters")
+    .select("id, title");
 router.get('/', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { data: chapter, error } = yield supabase
-            .from('chapters')
-            .select('id, title');
+        const { data, error } = yield chaptersQuery;
         if (error) {
-            return res.status(500).send(error.message);
+            res.status(500).send(error.message);
+            return;
         }
-        res.send(chapter);
+        res.json(data);
     });
 });
 // GET chapter by Id
 router.get('/:chapterId', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { chapterId } = req.params;
-        const { data, error } = yield supabase
-            .from('chapters')
-            .select('*')
-            .eq('id', chapterId);
+        const chapterByIdQuery = supabase
+            .from("chapters")
+            .select("*")
+            .eq("id", chapterId);
+        const { data, error } = yield chapterByIdQuery;
         if (error) {
             if (error.code === 'PGRST116') {
-                return res.status(404).json({ error: "Chapter not found" });
+                res.status(404).json({ error: "Chapter not found" });
+                return;
             }
-            return res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message });
+            return;
         }
         if (!data || data.length === 0) {
-            return res.status(404).json({ error: "Chapter not found" });
+            res.status(404).json({ error: "Chapter not found" });
+            return;
         }
-        res.json(data[0]); // retourne le premier (et unique) chapitre correspondant
-    });
-});
-// GET answers by chapterId
-router.get('/answers/:chapterId', function (req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { chapterId } = req.params;
-        const { data, error } = yield supabase
-            .from('answers')
-            .select('id, possible_answer, is_correct')
-            .eq('chapter_id', chapterId);
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-        if (!data || data.length === 0) {
-            return res.status(404).json({ error: "No answers found for this chapter" });
-        }
-        res.json(data);
+        res.json(data[0]);
     });
 });
 export default router;
