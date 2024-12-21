@@ -24,8 +24,8 @@ const app = express();
 
 // Activer CORS
 app.use(cors({
-  origin: 'http://localhost:3020', // Frontend
-  credentials: true,              // Autorise les cookies et les informations d'authentification
+  origin: ['http://localhost:3020', 'http://188.165.238.74:3020'],
+  credentials: true,             
   allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
 
