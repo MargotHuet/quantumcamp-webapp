@@ -42,29 +42,39 @@ router.get('/', async function (req: Request, res: Response): Promise<void> {
 router.get('/:chapterId', async function (req: Request, res: Response): Promise<void> {
   const { chapterId } = req.params;
 
-  const chapterByIdQuery = supabase
+  const { data: allChapters, error: allChaptersError } = await supabase
     .from("chapters")
-    .select("*")
-    .eq("id", chapterId);
-  type ChapterById = QueryData<typeof chapterByIdQuery>;
+    .select("id, title, content")
+    .order("id", { ascending: true });
 
-  const { data, error } = await chapterByIdQuery;
-
-  if (error) {
-    if (error.code === 'PGRST116') {
-      res.status(404).json({ error: "Chapter not found" });
-      return;
-    }
-    res.status(500).json({ error: error.message });
+  if (allChaptersError) {
+    res.status(500).json({ error: allChaptersError.message });
     return;
   }
 
-  if (!data || data.length === 0) {
-    res.status(404).json({ error: "Chapter not found" });
+  if (!allChapters || allChapters.length === 0) {
+    res.status(404).json({ error: "Aucun chapitre trouvé." });
     return;
   }
 
-  res.json(data[0] as ChapterById);
+  const currentChapterIndex = allChapters.findIndex((chapter) => chapter.id === chapterId);
+
+  if (currentChapterIndex === -1) {
+    res.status(404).json({ error: "Chapitre non trouvé." });
+    return;
+  }
+
+  const currentChapter = allChapters[currentChapterIndex];
+  const nextChapter = allChapters[currentChapterIndex + 1] || null;
+
+  res.json({
+    ...currentChapter,
+    next_chapter_id: nextChapter ? nextChapter.id : null,
+  });
 });
+
+
+
+
 
 export default router;

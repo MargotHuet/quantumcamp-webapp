@@ -1,5 +1,13 @@
 'use client';
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+interface Chapter {
+  id: string;
+  title: string;
+  content: string;
+  next_chapter_id: string | null;
+}
 
 interface Answer {
   id: number;
@@ -13,41 +21,55 @@ interface Quiz {
 }
 
 export default function QuizSection({ chapterId }: { chapterId: string }) {
+  const [chapter, setChapter] = useState<Chapter | null>(null);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [showNextButton, setShowNextButton] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchQuizData = async () => {
+    const fetchChapterAndQuiz = async () => {
       try {
         setLoading(true);
 
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-        // Étape 1 : Récupérer la question depuis la table `chapters`
-        const chapterQuestionResponse = await fetch(`${apiUrl}/answers/quiz/${chapterId}`, {
+        // Récupérer les informations du chapitre actuel
+        const chapterResponse = await fetch(`${apiUrl}/chapters/${chapterId}`, {
           headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
         });
 
-        if (!chapterQuestionResponse.ok) {
-          throw new Error(`Échec de la récupération de la question : ${chapterQuestionResponse.statusText}`);
+        if (!chapterResponse.ok) {
+          throw new Error(`Échec de la récupération du chapitre : ${chapterResponse.statusText}`);
         }
 
-        const questionData = await chapterQuestionResponse.json();
+        const chapterData: Chapter = await chapterResponse.json();
+        setChapter(chapterData);
 
-        if (!questionData.question) {
-          throw new Error("La réponse du backend ne contient pas de question.");
+        // Récupérer le quiz associé au chapitre
+        const questionResponse = await fetch(`${apiUrl}/answers/quiz/${chapterId}`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!questionResponse.ok) {
+          throw new Error(`Échec de la récupération de la question : ${questionResponse.statusText}`);
         }
 
-        // Étape 2 : Récupérer les réponses depuis la table `answers`
-        console.log(`Fetching answers from: ${apiUrl}/answers/answers/${chapterId}`);
+        const questionData = await questionResponse.json();
+
         const answersResponse = await fetch(`${apiUrl}/answers/answers/${chapterId}`, {
           headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
         });
 
@@ -57,27 +79,41 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
 
         const answersData = await answersResponse.json();
 
-        if (!Array.isArray(answersData)) {
-          throw new Error("La réponse du backend ne contient pas un tableau de réponses.");
-        }
-
-        // Mise à jour de l'état avec la question et les réponses
         setQuiz({
           question: questionData.question,
           answers: answersData,
         });
       } catch (error) {
         setError(error instanceof Error ? error.message : String(error));
+        setChapter(null);
         setQuiz(null);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchQuizData();
+    fetchChapterAndQuiz();
   }, [chapterId]);
 
-  // Gestion des états de chargement et d'erreur
+  const handleAnswerClick = (answerId: number, isCorrect: boolean) => {
+    setSelectedAnswerId(answerId);
+    setIsCorrect(isCorrect);
+
+    if (isCorrect) {
+      setShowNextButton(true);
+    }
+  };
+
+  const handleNextQuiz = () => {
+    if (chapter?.next_chapter_id) {
+      console.log("Redirection vers le chapitre suivant :", chapter.next_chapter_id);
+      router.push(`/learn/${chapter.next_chapter_id}`);
+    } else {
+      alert("Vous avez terminé tous les chapitres !");
+    }
+  };
+  
+
   if (loading) {
     return <p className="text-center">Chargement...</p>;
   }
@@ -90,7 +126,6 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
     return <p className="text-center">Aucun quiz disponible pour ce chapitre.</p>;
   }
 
-  // Rendu de la section du quiz
   return (
     <div className="flex flex-col justify-center items-center p-4 mb-24">
       <div className="bg-white rounded-md shadow-lg w-full max-w-md">
@@ -101,7 +136,14 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
           {quiz.answers.map((answer) => (
             <li key={answer.id} className="flex items-center">
               <button
-                className="w-full rounded-lg p-3 bg-gray-100 hover:bg-gray-200 transition-all duration-200 text-center"
+                onClick={() => handleAnswerClick(answer.id, answer.is_correct)}
+                className={`w-full rounded-lg p-3 transition-all duration-200 text-center ${
+                  selectedAnswerId === answer.id
+                    ? answer.is_correct
+                      ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`}
               >
                 {answer.possible_answer}
               </button>
@@ -109,6 +151,19 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
           ))}
         </ul>
       </div>
+      {selectedAnswerId !== null && (
+        <p className="text-center mt-4 font-bold">
+          {isCorrect ? "Bonne réponse ! 🎉" : "Mauvaise réponse. 😢"}
+        </p>
+      )}
+      {showNextButton && (
+        <button
+          onClick={handleNextQuiz}
+          className="border border-blue-500 bg-blue-100 rounded-lg w-40 p-2 hover:bg-blue-200 hover:border-blue-600 hover:text-white mt-4"
+        >
+          Suivant
+        </button>
+      )}
     </div>
   );
 }
