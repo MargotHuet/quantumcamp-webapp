@@ -40,7 +40,7 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
         return res.status(400).json({ error: 'Passwords should match.' });
     }
     try {
-        const { data, error } = yield supabase.auth.signUp({
+        const { error } = yield supabase.auth.signUp({
             email,
             password,
             options: {
@@ -55,8 +55,8 @@ router.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         return res.status(200).json({ message: "Account successfully created. Please login." });
     }
-    catch (error) {
-        console.error("Error creating user:", error.message);
+    catch (err) {
+        console.error("Error creating user:", err.message);
         return res.status(500).json({ error: "Internal server error." });
     }
 }));
@@ -86,7 +86,8 @@ router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (err) {
-        console.error('Error logging in:', err.message);
+        const error = err;
+        console.error('Error logging in:', error.message);
         return res.status(500).json({ error: 'Internal server error.' });
     }
 }));

@@ -12,7 +12,7 @@ interface Quiz {
   answers: Answer[];
 }
 
-export default function QuizSection({ chapterId }: { chapterId: number }) {
+export default function QuizSection({ chapterId }: { chapterId: string }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,33 +25,45 @@ export default function QuizSection({ chapterId }: { chapterId: number }) {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
         // Étape 1 : Récupérer la question depuis la table `chapters`
-        const chapterResponse = await fetch(`${apiUrl}/chapters/${chapterId}`, {
+        const chapterQuestionResponse = await fetch(`${apiUrl}/answers/quiz/${chapterId}`, {
           headers: {
             Accept: "application/json",
+            "Content-Type": "application/json"
           },
         });
 
-        if (!chapterResponse.ok) {
-          throw new Error(`Failed to fetch chapter: ${chapterResponse.statusText}`);
+        if (!chapterQuestionResponse.ok) {
+          throw new Error(`Échec de la récupération de la question : ${chapterQuestionResponse.statusText}`);
         }
 
-        const chapterData = await chapterResponse.json();
+        const questionData = await chapterQuestionResponse.json();
+
+        if (!questionData.question) {
+          throw new Error("La réponse du backend ne contient pas de question.");
+        }
 
         // Étape 2 : Récupérer les réponses depuis la table `answers`
-        const answersResponse = await fetch(`${apiUrl}/chapters/answers/${chapterId}`, {
+        console.log(`Fetching answers from: ${apiUrl}/answers/answers/${chapterId}`);
+        const answersResponse = await fetch(`${apiUrl}/answers/answers/${chapterId}`, {
           headers: {
             Accept: "application/json",
+            "Content-Type": "application/json"
           },
         });
 
         if (!answersResponse.ok) {
-          throw new Error(`Failed to fetch answers: ${answersResponse.statusText}`);
+          throw new Error(`Échec de la récupération des réponses : ${answersResponse.statusText}`);
         }
 
         const answersData = await answersResponse.json();
 
+        if (!Array.isArray(answersData)) {
+          throw new Error("La réponse du backend ne contient pas un tableau de réponses.");
+        }
+
+        // Mise à jour de l'état avec la question et les réponses
         setQuiz({
-          question: chapterData.question,
+          question: questionData.question,
           answers: answersData,
         });
       } catch (error) {
@@ -65,6 +77,7 @@ export default function QuizSection({ chapterId }: { chapterId: number }) {
     fetchQuizData();
   }, [chapterId]);
 
+  // Gestion des états de chargement et d'erreur
   if (loading) {
     return <p className="text-center">Chargement...</p>;
   }
@@ -73,10 +86,11 @@ export default function QuizSection({ chapterId }: { chapterId: number }) {
     return <p className="text-center text-red-500">{error}</p>;
   }
 
-  if (!quiz) {
+  if (!quiz || !quiz.question) {
     return <p className="text-center">Aucun quiz disponible pour ce chapitre.</p>;
   }
 
+  // Rendu de la section du quiz
   return (
     <div className="flex flex-col justify-center items-center p-4 mb-24">
       <div className="bg-white rounded-md shadow-lg w-full max-w-md">

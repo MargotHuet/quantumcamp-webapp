@@ -1,38 +1,47 @@
 import { supabase } from "../clientSupabase.js";
-import express from 'express';
+import express, { Request, Response }  from 'express';
 const router = express.Router();
 
-// GET all answers table content 
-router.get('/', async function(req, res) {
-  const { data: answers, error } = await supabase
-    .from('answers')
-    .select('*');
+// GET quiz question 
+router.get('/quiz/:chapterId', async function(req: Request, res: Response) {
+  const { chapterId } = req.params;
+  
+  const { data: question, error } = await supabase
+      .from('chapters')
+      .select('question')
+      .eq('id', chapterId);
+
   if (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).json({ error: error.message });
   }
-  res.send(answers);
+
+  if (!question || question.length === 0) {
+    return res.status(404).json({ error: "No question found for this chapter" });
+  }
+
+  // Renvoyer directement l'objet question au lieu d'un tableau
+  res.status(200).json(question[0]);
 });
 
 
-// GET possibles answers user can select 
-router.get('/responses/:chapterId', async function(req, res) {
-    const { chapterId } = req.params;
-    
-    const { data: responses, error } = await supabase
-        .from('answers')
-        .select('*')
-        .eq('chapter_id', chapterId)
+// GET possibles answers and correct answer by chapterId
+router.get('/answers/:chapterId', async  function(req, res) {
+  const { chapterId } = req.params;
 
-    if (error) {
-      return res.status(500).json({ error: error.message });
-    }
+  const { data, error } = await supabase
+    .from('answers')
+    .select('id, possible_answer, is_correct')
+    .eq('chapter_id', chapterId);
 
-    if (!responses || responses.length === 0) {
-      return res.status(404).json({ error: "No answers found for this chapter" });
-    }
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
 
-    res.status(200).json(responses);
+  if (!data || data.length === 0) {
+    return res.status(404).json({ error: "No answers found for this chapter" });
+  }
+
+  res.json(data);
 });
-
 
 export default router;
