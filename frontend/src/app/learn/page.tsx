@@ -29,7 +29,6 @@ export default function Learn() {
         const data = await response.json();
         setCourses(data);
       } catch (error) { 
-        console.log(error);
       } finally {
         setLoading(false);
       }

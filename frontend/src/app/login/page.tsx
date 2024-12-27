@@ -39,7 +39,6 @@ export default function Login() {
             )
 
         if (error) throw error 
-            console.log(data);
             router.push('/profile');
         }
 

@@ -12,11 +12,12 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
+import progressRouter from './routes/progress.js';
 const app = express();
 // Activer CORS
 app.use(cors({
-    origin: 'http://localhost:3020', // Frontend
-    credentials: true, // Autorise les cookies et les informations d'authentification
+    origin: ['http://localhost:3020', 'http://188.165.238.74:3020'],
+    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.get('/products/:id', function (req, res) {
@@ -34,6 +35,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);
+app.use('/progress', progressRouter);
 // Gestion des erreurs 404
 app.use(function (req, res, next) {
     next(createError(404));

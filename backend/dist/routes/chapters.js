@@ -42,24 +42,26 @@ router.get('/', function (req, res) {
 router.get('/:chapterId', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { chapterId } = req.params;
-        const chapterByIdQuery = supabase
+        const { data: allChapters, error: allChaptersError } = yield supabase
             .from("chapters")
-            .select("*")
-            .eq("id", chapterId);
-        const { data, error } = yield chapterByIdQuery;
-        if (error) {
-            if (error.code === 'PGRST116') {
-                res.status(404).json({ error: "Chapter not found" });
-                return;
-            }
-            res.status(500).json({ error: error.message });
+            .select("id, title, content")
+            .order("id", { ascending: true });
+        if (allChaptersError) {
+            res.status(500).json({ error: allChaptersError.message });
             return;
         }
-        if (!data || data.length === 0) {
-            res.status(404).json({ error: "Chapter not found" });
+        if (!allChapters || allChapters.length === 0) {
+            res.status(404).json({ error: "Aucun chapitre trouvé." });
             return;
         }
-        res.json(data[0]);
+        const currentChapterIndex = allChapters.findIndex((chapter) => chapter.id === chapterId);
+        if (currentChapterIndex === -1) {
+            res.status(404).json({ error: "Chapitre non trouvé." });
+            return;
+        }
+        const currentChapter = allChapters[currentChapterIndex];
+        const nextChapter = allChapters[currentChapterIndex + 1] || null;
+        res.json(Object.assign(Object.assign({}, currentChapter), { next_chapter_id: nextChapter ? nextChapter.id : null }));
     });
 });
 export default router;

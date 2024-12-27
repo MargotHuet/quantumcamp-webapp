@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+// Importations nécessaires
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+
 import Link from "next/link";
 import Image from "next/image";
 import data from "../data/data";
@@ -85,7 +89,7 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className="px-4 py-2 border border-red-500 bg-red-100 text-black rounded-lg hover:bg-red-200"
               >
-                Déconnexion
+                <FontAwesomeIcon icon={faPowerOff} />
               </button>
             </>
           ) : (

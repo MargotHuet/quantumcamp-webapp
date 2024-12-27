@@ -20,7 +20,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(400).json({ error: error.message });
         }
         if (user) {
-            console.log(user);
             return res.status(200).json(user);
         }
         return res.status(404).json({ message: 'User not found' });

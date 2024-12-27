@@ -18,7 +18,6 @@ router.get('/', async (req: Request, res: Response): Promise<Response> => {
     }
 
     if (user) {
-      console.log(user);
       return res.status(200).json(user);
     }
 
@@ -223,6 +222,5 @@ router.delete('/delete', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 export default router;

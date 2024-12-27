@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import BackButton from "@/components/backButton";
 import QuizSection from "@/components/QuizSection";
 import { useParams, useRouter } from "next/navigation";
+import { supabase } from "../../../../clientSupabase";
 
 interface Chapter {
   id: string;
@@ -14,26 +15,45 @@ export default function ChapterPage() {
   const { chapterId } = useParams();
   const router = useRouter();
   const [chapter, setChapter] = useState<Chapter | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Récupérer les informations utilisateur
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) {
+          setUserId(null);
+        } else {
+          setUserId(user.id);
+        }
+      } catch (error) {
+        setUserId(null);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  // Récupérer les données du chapitre
   useEffect(() => {
     const fetchChapter = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
         const response = await fetch(`${apiUrl}/chapters/${chapterId}`, {
           headers: {
-            Accept: 'application/json',
+            Accept: "application/json",
           },
           method: "GET",
         });
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-  
+
         const data = await response.json();
-        console.log("Received data:", data);  
         setChapter(data);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -43,7 +63,7 @@ export default function ChapterPage() {
         setLoading(false);
       }
     };
-  
+
     fetchChapter();
   }, [chapterId]);
 
@@ -57,6 +77,10 @@ export default function ChapterPage() {
 
   if (!chapter) {
     return <p>No chapter available.</p>;
+  }
+
+  if (!userId) {
+    return <p>Error: User not logged in.</p>;
   }
 
   return (
@@ -75,8 +99,7 @@ export default function ChapterPage() {
         id="2"
         className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
       >
-        {/* Pass `router` as a prop to `QuizSection` */}
-        <QuizSection chapterId={String(chapterId)} />
+        <QuizSection chapterId={String(chapterId)} userId={userId} />
       </div>
     </div>
   );
