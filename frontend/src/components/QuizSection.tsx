@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { supabase } from "../../clientSupabase";
 
 interface Chapter {
   id: string;
@@ -20,7 +20,13 @@ interface Quiz {
   answers: Answer[];
 }
 
-export default function QuizSection({ chapterId }: { chapterId: string }) {
+export default function QuizSection({
+  chapterId,
+  userId,
+}: {
+  chapterId: string;
+  userId: string;
+}) {
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,7 +34,6 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
   const [selectedAnswerId, setSelectedAnswerId] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchChapterAndQuiz = async () => {
@@ -46,7 +51,9 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
         });
 
         if (!chapterResponse.ok) {
-          throw new Error(`Échec de la récupération du chapitre : ${chapterResponse.statusText}`);
+          throw new Error(
+            `Échec de la récupération du chapitre : ${chapterResponse.statusText}`
+          );
         }
 
         const chapterData: Chapter = await chapterResponse.json();
@@ -61,7 +68,9 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
         });
 
         if (!questionResponse.ok) {
-          throw new Error(`Échec de la récupération de la question : ${questionResponse.statusText}`);
+          throw new Error(
+            `Échec de la récupération de la question : ${questionResponse.statusText}`
+          );
         }
 
         const questionData = await questionResponse.json();
@@ -74,7 +83,9 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
         });
 
         if (!answersResponse.ok) {
-          throw new Error(`Échec de la récupération des réponses : ${answersResponse.statusText}`);
+          throw new Error(
+            `Échec de la récupération des réponses : ${answersResponse.statusText}`
+          );
         }
 
         const answersData = await answersResponse.json();
@@ -95,24 +106,56 @@ export default function QuizSection({ chapterId }: { chapterId: string }) {
     fetchChapterAndQuiz();
   }, [chapterId]);
 
-  const handleAnswerClick = (answerId: number, isCorrect: boolean) => {
+  const handleAnswerClick = async (answerId: number, isCorrect: boolean) => {
+    if (!userId) {
+      console.error("Utilisateur non connecté.");
+      return;
+    }
+
     setSelectedAnswerId(answerId);
     setIsCorrect(isCorrect);
 
     if (isCorrect) {
       setShowNextButton(true);
+
+      // Appel à l'API pour sauvegarder la progression
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session || !session.access_token) {
+          throw new Error("Token d'authentification manquant.");
+        }
+
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/progress/save-progress`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`, // Inclure le token JWT
+          },
+          body: JSON.stringify({
+            userId,
+            answerId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erreur API : ${response.statusText}`);
+        }
+
+        const result = await response.json();
+      } catch (error) {
+        console.error("Erreur lors de la sauvegarde de la progression :", error);
+      }
     }
   };
 
   const handleNextQuiz = () => {
     if (chapter?.next_chapter_id) {
-      console.log("Redirection vers le chapitre suivant :", chapter.next_chapter_id);
-      router.push(`/learn/${chapter.next_chapter_id}`);
+      window.location.href = `/learn/${chapter.next_chapter_id}`;
     } else {
       alert("Vous avez terminé tous les chapitres !");
     }
   };
-  
 
   if (loading) {
     return <p className="text-center">Chargement...</p>;

@@ -10,45 +10,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { supabase } from "../clientSupabase.js";
 import express from 'express';
 const router = express.Router();
-// GET quiz question
-const chapterQuestionQuery = supabase
-    .from("chapters")
-    .select("question");
+// GET quiz question 
 router.get('/quiz/:chapterId', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { chapterId } = req.params;
-        const { data: questions, error } = yield chapterQuestionQuery
+        const { data: question, error } = yield supabase
+            .from('chapters')
+            .select('question')
             .eq('id', chapterId);
         if (error) {
-            res.status(500).json({ error: error.message });
-            return;
+            return res.status(500).json({ error: error.message });
         }
-        if (!questions || questions.length === 0) {
-            res.status(404).json({ error: "No question found for this chapter" });
-            return;
+        if (!question || question.length === 0) {
+            return res.status(404).json({ error: "No question found for this chapter" });
         }
-        const question = questions[0]; // Accéder au premier élément du tableau
-        res.status(200).json(question);
+        // Renvoyer directement l'objet question au lieu d'un tableau
+        res.status(200).json(question[0]);
     });
 });
-// GET possible answers and correct answer by chapterId
-const answersQuery = supabase
-    .from("answers")
-    .select("id, possible_answer, is_correct");
+// GET possibles answers and correct answer by chapterId
 router.get('/answers/:chapterId', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { chapterId } = req.params;
-        const { data, error } = yield answersQuery
+        const { data, error } = yield supabase
+            .from('answers')
+            .select('id, possible_answer, is_correct')
             .eq('chapter_id', chapterId);
         if (error) {
-            res.status(500).json({ error: error.message });
-            return;
+            return res.status(500).json({ error: error.message });
         }
         if (!data || data.length === 0) {
-            res.status(404).json({ error: "No answers found for this chapter" });
-            return;
+            return res.status(404).json({ error: "No answers found for this chapter" });
         }
-        res.status(200).json(data);
+        res.json(data);
     });
 });
 export default router;

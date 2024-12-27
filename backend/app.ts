@@ -15,6 +15,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
+import progressRouter from './routes/progress.js';
 
 interface CustomError extends Error {
   status?: number; 
@@ -47,6 +48,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);
+app.use('/progress', progressRouter);
 
 
 // Gestion des erreurs 404

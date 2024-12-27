@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../../clientSupabase";
 import { Session } from "@supabase/supabase-js"; 
 import UpdatePasswordPage from "../updatePassword/page";
+import UserCompletedChapters from "@/components/UserCompletedChapters";
 
 interface UserData {
   name: string;
@@ -93,7 +94,7 @@ export default function Profile() {
   if (loading) {
     return (
       <section className="bg-creamWhite flex flex-col justify-center items-center min-h-screen">
-        <div className="mx-auto bg-blue-500 p-4 rounded-lg shadow-lg space-y-8">
+        <div className="mx-auto bg-blueBg p-4 rounded-lg shadow-lg space-y-8">
           <p>Chargement...</p>
         </div>
       </section>
@@ -103,23 +104,29 @@ export default function Profile() {
   return (
     <>
       {session ? (
-        <section className="bg-creamWhite flex flex-col justify-center items-center min-h-screen">
-          <p>User profile page</p>
-          <div className="mx-auto bg-blue-500 p-4 rounded-lg shadow-lg space-y-8">
-            <p>Nom : {userData?.name}</p>
-            <p>Email : {userData?.email}</p>
-            <UpdatePasswordPage />
-            <button
-              onClick={handleDeleteAccount}
-              className="border border-orange-300 bg-orange-100 rounded-lg w-40 p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
-            >
-              Supprimer votre compte
-            </button>
-          </div>
-        </section>
+        <section className="bg-creamWhite flex flex-col items-center relative pt-4" style={{ minHeight: "100vh" }}>
+        <p className="tracking-tight font-extrabold text-gray-900 text-4xl text-center w-full mb-6 mt-12">
+          {userData?.name}
+        </p>
+        <div
+          className="bg-none md:bg-blueBg p-6 rounded-lg md:shadow-lg space-y-6 w-full max-w-md"
+          style={{ position: "relative", top: "4vh" }}
+        >
+          <p>Nom : {userData?.name}</p>
+          <p>Email : {userData?.email}</p>
+          <UpdatePasswordPage />
+          <UserCompletedChapters userId={session.user.id} />
+          <button
+            onClick={handleDeleteAccount}
+            className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
+          >
+            Supprimer votre compte
+          </button>
+        </div>
+      </section>
       ) : (
         <section className="bg-creamWhite flex flex-col justify-center items-center min-h-screen">
-          <div className="mx-auto bg-blue-500 p-4 rounded-lg shadow-lg space-y-8">
+          <div className="mx-auto bg-blueBg p-4 rounded-lg shadow-lg space-y-8">
             <p>Vous devez être connecté pour voir cette page.</p>
           </div>
         </section>
