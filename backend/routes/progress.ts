@@ -76,7 +76,7 @@ router.post('/save-progress', async (req: Request, res: Response) => {
   
         return res.status(200).json({ message: "Progress saved successfully." });
       }
-    } catch (error) {
+    } catch {
       return res.status(500).json({ error: "Internal server error" });
     }
   });
