@@ -6,10 +6,16 @@
 
 import app from '../app.js';
 import debugModule from 'debug'; // Debugging messages
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import { AddressInfo } from 'net';
 
 const debug = debugModule('backend:server');
+
+const options = {
+  key: fs.readFileSync('../key.pem'),
+  cert: fs.readFileSync('../cert.pem'),
+}
 
 /**
  * Get port from environment and store in Express.
@@ -22,7 +28,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -94,7 +100,7 @@ function onError(error: NodeJS.ErrnoException): void {
  */
 
 function onListening() {
-  const addr = server.address();
+  const addr = server.address() as AddressInfo;
   if (addr === null) {
     console.error('Server address is null');
     return;

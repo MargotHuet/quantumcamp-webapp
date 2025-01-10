@@ -6,16 +6,15 @@ import logger from 'morgan';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { Request, Response, NextFunction } from 'express';
-
-// Définir __dirname dans un module ES
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
 import progressRouter from './routes/progress.js';
+
+// Définir __dirname dans un module ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface CustomError extends Error {
   status?: number; 
@@ -30,10 +29,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
 
-app.get('/products/:id', function (req, res) {
-  res.json({ msg: 'This is CORS-enabled for all origins!' });
-});
-
 // Configuration du moteur de vues
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -44,6 +39,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
@@ -66,6 +62,5 @@ app.use(function (err: CustomError, req: Request, res: Response) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 export default app;
