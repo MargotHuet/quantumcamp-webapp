@@ -81,7 +81,7 @@ router.post('/login', async (req: Request, res: Response) => {
     // Définir le cookie avec le token d'accès
     res.cookie('supabase-auth-token', data.session?.access_token, {
       httpOnly: true,     // Sécurise le cookie pour ne pas être accessible en JS
-      secure: false,      // Passez à `true` en production (HTTPS)
+      secure: true,      // Passez à `true` en production (HTTPS)
       sameSite: 'lax',    // Empêche les attaques CSRF tout en autorisant les requêtes cross-origin nécessaires
       maxAge: 60 * 60 * 24 * 7, // Expiration dans 7 jours
     });
