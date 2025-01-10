@@ -7,7 +7,6 @@ import { supabase } from "../../../clientSupabase";
 interface Course {
   id: string;
   title: string;
-  is_finished: boolean;
   chapter_id: number;
   created_at: number;
 }

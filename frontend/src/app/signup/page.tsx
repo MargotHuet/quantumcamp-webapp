@@ -31,7 +31,7 @@ export default function Signup() {
     if (/[A-Z]/.test(password)) strength += 1; // Une majuscule
     if (/[a-z]/.test(password)) strength += 1; // Une minuscule
     if (/\d/.test(password)) strength += 1; // Un chiffre
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1; // Un caractère spécial
+    if (/[!@#$%^&*()_\-+={}[\]:;"'<>,.?/\\|~`]/.test(password)) strength += 1; // Un caractère spécial
 
     setPasswordStrength(strength);
   }
@@ -52,7 +52,7 @@ export default function Signup() {
     e.preventDefault();
 
     if (passwordStrength < 5) {
-      setError("Le mot de passe ne respecte pas les règles de sécurité.");
+      setError("Le mot de passe doit contenir au minimum 12 caractères dont majuscules, miniscules, chiffres et caractères spéciaux.");
       return;
     }
 
