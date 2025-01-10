@@ -8,7 +8,6 @@ import app from '../app.js';
 import debugModule from 'debug'; // Debugging messages
 import https from 'https';
 import fs from 'fs';
-import http from 'http';
 import { AddressInfo } from 'net';
 
 const debug = debugModule('backend:server');
