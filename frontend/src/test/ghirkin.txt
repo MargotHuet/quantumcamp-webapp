@@ -1,0 +1,29 @@
+Feature: User authentication
+
+    Scenario: Logging in with correct credentials
+        Given the user has an existing account
+        And the user is in the login page
+        When the user enters the correct email and password
+        Then the user is redirected to its profile page
+
+Feature: User authentication with the wrong credentials
+
+    Scenario: Logging in with incorrect credentials
+        Given the user has an existing account
+        And the user is in the login page
+        When the user enters either incorrect email and password or both
+        Then the user is shown an error message
+
+Feature: Learn page displays content to authenticated users
+
+    Scenario: Accessing learn page with user session
+        Given an authenticated user
+        When the user is in learn page
+        Then the user can view the content
+
+Feature: Learn page is not accessible to unauthenticated users
+
+    Scenario: Accessing learn page with no user session
+        Given an unauthenticated user
+        When the user is in learn page
+        Then a redirection message to login or signin is displayed
