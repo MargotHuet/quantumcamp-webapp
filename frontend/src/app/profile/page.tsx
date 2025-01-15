@@ -114,7 +114,6 @@ export default function Profile() {
         >
           <p>Nom : {userData?.name}</p>
           <p>Email : {userData?.email}</p>
-          <UpdatePasswordPage />
           <UserCompletedChapters userId={session.user.id} />
           <button
             onClick={handleDeleteAccount}
