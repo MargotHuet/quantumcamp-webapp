@@ -84,7 +84,7 @@ export default function Signup() {
       }
 
       // Succès
-      setMessage(data.message || "Votre compte a été créé avec succès.");
+      setMessage(data.message || "Votre compte a été créé avec succès. Consultez votre boite mail");
       setError(""); // Efface les erreurs
       setTimeout(() => {
         router.push("/login"); // Redirige l'utilisateur vers la page de connexion
