@@ -87,7 +87,7 @@ export default function ChapterPage() {
     <div className="flex flex-col md:flex-row h-screen">
       <div
         id="1"
-        className="flex flex-col items-center justify-center bg-sky-100 p-4 md:w-3/5 md:p-8"
+        className="flex flex-col items-center justify-center bg-blueBg p-4 md:w-3/5 md:p-8"
       >
         <div className="w-full mb-4">
           <BackButton />
