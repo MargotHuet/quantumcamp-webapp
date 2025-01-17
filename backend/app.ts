@@ -24,7 +24,7 @@ const app = express();
 
 // Activer CORS
 app.use(cors({
-  origin: ['http://localhost:3020', 'http://188.165.238.74:3020', 'http://quantumcamp.adaschool.fr'],
+  origin: ['http://localhost:3020', 'http://188.165.238.74:3020', 'https://quantumcamp.adaschool.fr'],
   credentials: true,             
   allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
