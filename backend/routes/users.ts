@@ -21,7 +21,7 @@ router.get('/', async (req: Request, res: Response): Promise<Response> => {
       return res.status(200).json(user);
     }
 
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: 'Utilisateur introuvable' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -34,10 +34,10 @@ router.post('/signup', async (req: Request, res: Response) => {
   const { name, email, password, confirmPassword }: { name: string; email: string; password: string; confirmPassword: string } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
+    return res.status(400).json({ error: 'Email et mot de passe requis.' });
   }
   if (password !== confirmPassword) {
-    return res.status(400).json({ error: 'Passwords should match.' });
+    return res.status(400).json({ error: 'Les mots de passe ne correspondent pas.' });
   }
   try {
     const { error } = await supabase.auth.signUp({
@@ -49,13 +49,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     });
 
     if (error) {
-      if (error.message === "User already registered") {
-        return res.status(400).json({ error: "Email already used. Choose another one." });
+      if (error.message === "Utilisateur déjà existant") {
+        return res.status(400).json({ error: "Email déjà utilisé." });
       }
-      return res.status(400).json({ error: `An unexpected error occurred: ${error.message}` });
+      return res.status(400).json({ error: `Une erreur est survenue: ${error.message}` });
     }
 
-    return res.status(200).json({ message: "Account successfully created. Please login." });
+    return res.status(200).json({ message: "Compte crée. Connectez-vous." });
   } catch (err: unknown) {
     console.error("Error creating user:", (err as Error).message);
     return res.status(500).json({ error: "Internal server error." });
@@ -67,7 +67,7 @@ router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
+    return res.status(400).json({ error: 'Email et mot de passe requis.' });
   }
 
   try {
@@ -87,7 +87,7 @@ router.post('/login', async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({
-      message: 'Login successful.',
+      message: 'Connexion réussie.',
       user: data.user,
     });
   } catch (err: unknown) {
@@ -112,7 +112,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   const { email } = req.body;
 
   if (!email) {
-    return res.status(400).json({ error: 'Email is required.' });
+    return res.status(400).json({ error: 'Email requis.' });
   }
 
   try {

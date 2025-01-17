@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Modal from "@/components/Modals";
 
 interface FormData {
     name: string;
@@ -22,6 +23,7 @@ export default function Signup() {
     const [passwordStrength, setPasswordStrength] = useState(0);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const [open, setOpen] = useState(false);
 
     function evaluatePasswordStrength(password: string) {
         let strength = 0;
@@ -52,11 +54,15 @@ export default function Signup() {
 
         if (passwordStrength < 5) {
             setError("Le mot de passe doit contenir au minimum 12 caractères dont majuscules, miniscules, chiffres et caractères spéciaux.");
+            setMessage("");
+            setOpen(true);
             return;
         }
 
         if (formData.password !== formData.confirmPassword) {
             setError("Les mots de passe ne correspondent pas.");
+            setMessage("");
+            setOpen(true);
             return;
         }
 
@@ -84,12 +90,14 @@ export default function Signup() {
 
             setMessage(data.message || "Votre compte a été créé avec succès. Consultez votre boite mail");
             setError("");
+            setOpen(true);
             setTimeout(() => {
                 router.push("/login");
             }, 2000);
         } catch (err: any) {
             setError(err.message || "Une erreur est survenue.");
             setMessage("");
+            setOpen(true);
         }
     }
 
@@ -214,12 +222,14 @@ export default function Signup() {
                             >
                                 Inscription
                             </button>
-                            {message && <p className="text-green-500 mt-4">{message}</p>}
-                            {error && <p className="text-red-500 mt-4">{error}</p>}
                         </div>
                     </div>
                 </div>
             </form>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                {message && <p className="text-green-500">{message}</p>}
+                {error && <p className="text-red-500">{error}</p>}
+            </Modal>
         </>
     );
 }
