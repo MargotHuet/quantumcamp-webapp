@@ -89,15 +89,17 @@ export default function ChapterPage() {
         id="1"
         className="flex flex-col items-center justify-center bg-blueBg p-4 md:w-3/5 md:p-8"
       >
-        <div className="w-full mb-4">
+        <div className="w-full pt-8 desktop:h-1/5">
           <BackButton />
         </div>
+        <div className="desktop:h-5/6">
         <h1 className="text-xl md:text-3xl font-bold mb-4 text-center">{chapter.title}</h1>
-        <p className="text-sm md:text-base text-justify">{chapter.content}</p>
+        <p className="text-sm  md:text-base text-justify desktop:px-44 desktop:p-8 desktop:w-4/4">{chapter.content}</p>
+      </div>
       </div>
       <div
         id="2"
-        className="flex flex-col items-center justify-center bg-sky-500 p-4 md:w-2/5 md:p-8"
+        className="flex flex-col items-center justify-center bg-creamWhite p-4 md:w-2/5 md:p-8"
       >
         <QuizSection chapterId={String(chapterId)} userId={userId} />
       </div>
