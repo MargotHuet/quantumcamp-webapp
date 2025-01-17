@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 interface CompletedChapter {
@@ -16,7 +17,6 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
     const fetchCompletedChapters = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-        console.log(apiUrl)
         const response = await fetch(`${apiUrl}/progress/completed-chapters/${userId}`, {
           headers: {
             Accept: 'application/json',
@@ -32,7 +32,6 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
         setCompletedChapters(data || []);
       } catch (err) {
         console.error('Unexpected error fetching completed chapters:', err);
-        setError('Une erreur est survenue lors de la récupération des chapitres complétés.');
       } finally {
         setLoading(false);
       }
@@ -50,12 +49,13 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
   }
 
   if (completedChapters.length === 0) {
-    return <p>Aucun chapitre complété pour le moment.</p>;
+    return <p>Aucun chapitre complété: 
+      <Link href={"/learn"} className='font-bold text-orange-500 hover:text-orange-400'> 🚀 Commencez maintenant 🚀</Link></p>;
   }
 
   return (
     <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-lg">
-      <h3 className="text-lg font-bold mb-4">Chapitres complétés :</h3>
+      <h3 className="text-lg font-bold mb-4">Chapitres complétés:</h3>
       <ul className="list-disc list-inside">
       {completedChapters.map((chapter, index) => (
           <ul key={index}>
