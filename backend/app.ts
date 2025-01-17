@@ -6,7 +6,6 @@ import logger from 'morgan';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { Request, Response, NextFunction } from 'express';
-import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
@@ -40,7 +39,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routers
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);
