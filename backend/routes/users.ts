@@ -216,7 +216,7 @@ router.delete('/delete', async (req, res) => {
       return res.status(500).json({ error: 'Failed to delete user from database' });
     }
 
-    return res.status(200).json({ message: 'User deleted successfully' });
+    return res.status(200).json({ message: 'Compte supprimé' });
   } catch (error) {
     console.error('Error deleting user:', error);
     return res.status(500).json({ error: 'Internal server error' });
