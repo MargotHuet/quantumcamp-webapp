@@ -55,7 +55,7 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
 
   return (
     <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-lg">
-      <h3 className="text-lg font-bold mb-4">Chapitres complétés :</h3>
+      <h3 className="text-lg font-bold mb-4">Chapitres complétés:</h3>
       <ul className="list-disc list-inside">
       {completedChapters.map((chapter, index) => (
           <ul key={index}>
