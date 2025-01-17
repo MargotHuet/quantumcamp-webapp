@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
-//import ForgotPassword from "@/components/forgotPassword";
 
 interface LoginData {
     email: string;
@@ -14,97 +13,100 @@ interface LoginData {
 export default function Login() {
     const router = useRouter();
 
-    const [ formData, setFormData ] = useState<LoginData>({
+    const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: ''
-    })
+    });
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
         setFormData((prevFormData: any) => ({
             ...prevFormData,
-            [name]:value,
+            [name]: value,
         }));
-      }
+    }
 
-      async function handleSubmit(e: any) {
+    async function handleSubmit(e: any) {
         e.preventDefault();
 
         try {
-            const { data, error } = await supabase.auth.signInWithPassword(
-                {
-                    email: formData.email,
-                    password: formData.password,
-                }
-            )
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: formData.email,
+                password: formData.password,
+            });
 
-        if (error) throw error 
+            if (error) throw error;
             router.push('/profile');
-        }
-
-        catch (error) {
+        } catch (error) {
             alert(error);
         }
-      }
+    }
 
     return (
         <>
-        <form onSubmit={handleSubmit}>
-        <div className="flex h-screen">
-            <div className="relative bg-blue-200 w-2/5">
-                <div className="absolute flex justify-start top-24">
-                    <Link href={"/"}>
-                        <Image
-                            src="/assets/QuantumCamp.png"
-                            alt="QuantumCamp logo"
-                            width={1000}
-                            height={1000}
-                        />
-                    </Link>
-                </div>
-            </div>
-            <div className="relative w-3/5">
-                <div className="absolute flex flex-col gap-6 justify-end top-24 left-44">
-                        <h1 className="flex text-lg font-firaSans">Welcome back !</h1>
-                        <p className="flex text-4xl font-firaSans">Connectez-vous</p>
-                </div>
-                <div className="absolute flex flex-col justify-end top-48 left-44">
-                        <p className="text-sm text-gray-600 font-anekDeva">Vous n&apos;avez pas de compte?<Link href={"/signup"} className="font-anekDeva text-blue-500 font-bold"> Créez le votre</Link></p>
-                </div>
-                <div className="absolute flex flex-col gap-2 justify-end top-72 left-44">
-                    <label className="text-md font-firaSans">Email</label>
-                    <input 
-                        className="bg-blue-200 w-80 h-10" 
-                        type="text" 
-                        name="email"
-                        placeholder="Email"
-                        onChange={handleChange}
-                        value={formData.email}
-                        required>
-                    </input>
-                    <label className="text-md font-firaSans">Mot de passe</label>
-                    <input 
-                        className="bg-blue-200 w-80 h-10" 
-                        type="password" 
-                        name="password"
-                        placeholder="Mot de passe"
-                        onChange={handleChange}
-                        value={formData.password}
-                        required>
-                    </input>
-                    <div className="text-xs font-anekDeva text-blue-500">
-                        <Link href="/forgotPassword">Mot de passe oublié?</Link>
+            <form onSubmit={handleSubmit}>
+                <div className="flex flex-col desktop:flex-row h-screen">
+                    {/* Desktop view */}
+                    <div className="hidden desktop:flex relative bg-blue-200 w-2/5 h-full justify-center items-center">
+                        <Link href={"/"}>
+                            <Image
+                                src="/assets/QuantumCamp.png"
+                                alt="QuantumCamp logo"
+                                width={500}
+                                height={500}
+                                className="desktop:w-auto desktop:h-auto"
+                            />
+                        </Link>
                     </div>
-                    <button 
-                        className="text-md w-1/2 font-firaSans border border-orange-500 bg-orange-100 mt-2 rounded-md"
-                        type="submit"
-                    >
-                        Connexion
-                    </button>
+                    {/* Form */}
+                    <div className="flex flex-col h-screen w-full items-center py-44 desktop:w-3/5 desktop:h-5/6 desktop:justify-center">
+                        <div className="text-center desktop:text-left mb-2">
+                            <h1 className="text-xl desktop:text-lg font-firaSans">Welcome back !</h1>
+                            <p className="text-2xl desktop:text-4xl font-firaSans">Connectez-vous</p>
+                        </div>
+
+                        <div className="mb-6 text-center desktop:text-left">
+                            <p className="text-sm text-gray-600 font-anekDeva">
+                                Vous n&apos;avez pas de compte?
+                                <Link href={"/signup"} className="text-blue-500 font-bold">
+                                    {' '}Créez le vôtre
+                                </Link>
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-4 w-8/12 max-w-sm">
+                            <label className="text-md font-firaSans">Email</label>
+                            <input
+                                className="bg-blueBg w-full h-10 px-2"
+                                type="text"
+                                name="email"
+                                placeholder="Email"
+                                onChange={handleChange}
+                                value={formData.email}
+                                required
+                            />
+                            <label className="text-md font-firaSans">Mot de passe</label>
+                            <input
+                                className="bg-blueBg w-full h-10 px-2"
+                                type="password"
+                                name="password"
+                                placeholder="Mot de passe"
+                                onChange={handleChange}
+                                value={formData.password}
+                                required
+                            />
+                            <div className="text-xs font-anekDeva text-blue-500 text-right">
+                                <Link href="/forgotPassword">Mot de passe oublié?</Link>
+                            </div>
+                            <button
+                                className="text-md font-firaSans border border-orange-500 bg-orange-100 mt-2 rounded-md py-2"
+                                type="submit"
+                            >
+                                Connexion
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        </form>
+            </form>
         </>
-    )
-};
+    );
+}
