@@ -16,6 +16,7 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
     const fetchCompletedChapters = async () => {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        console.log(apiUrl)
         const response = await fetch(`${apiUrl}/progress/completed-chapters/${userId}`, {
           headers: {
             Accept: 'application/json',
