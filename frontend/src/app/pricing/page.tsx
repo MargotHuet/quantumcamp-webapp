@@ -3,7 +3,7 @@ import PricingCard from "@/components/pricingCard";
 
 export default function Pricing() {
     return (
-        <div className="flex flex-col items-center bg-purpleBg px-4 py-8 sm:py-12">
+        <div className="flex flex-col items-center bg-purpleBg px-4 py-8 sm:py-12 min-h-screen">
             <div className="mb-4 text-center">
                 <h1 className="mb-4 text-5xl sm:text-5xl font-black text-black">Tarifs</h1>
                 <p className="text-sm sm:text-2xl">Choisissez la formule qui répond à vos besoins.</p>

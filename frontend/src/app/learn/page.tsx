@@ -58,7 +58,7 @@ export default function Learn() {
   return (
     <>
       {session ? (
-        <div className="flex flex-col items-center justify-center bg-creamWhite px-4 py-8 md:px-10 md:py-12">
+        <div className="flex flex-col items-center justify-center bg-creamWhite px-4 py-8 md:px-10 md:py-12 min-h-screen">
           <h1 className="text-2xl md:text-4xl font-bold mb-6">Sommaire</h1>
           <div className="flex flex-col w-full max-w-lg bg-blueBg rounded-lg p-4 md:p-6 text-center">
             {courses.map(course => (
