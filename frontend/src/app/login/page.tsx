@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
+import Modal from "@/components/Modals";
 
 interface LoginData {
     email: string;
@@ -12,6 +13,9 @@ interface LoginData {
 
 export default function Login() {
     const router = useRouter();
+    const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
+    const [open, setOpen] = useState(false);
 
     const [formData, setFormData] = useState<LoginData>({
         email: '',
@@ -38,7 +42,10 @@ export default function Login() {
             if (error) throw error;
             router.push('/profile');
         } catch (error) {
-            alert(error);
+            setError("Email ou mot de passe incorrects.");
+            setMessage("");
+            setOpen(true);
+            return;
         }
     }
 
@@ -107,6 +114,10 @@ export default function Login() {
                     </div>
                 </div>
             </form>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                {message && <p className="text-green-500">{message}</p>}
+                {error && <p className="text-red-500">{error}</p>}
+            </Modal>
         </>
     );
 }
