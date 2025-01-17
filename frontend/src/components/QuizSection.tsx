@@ -172,7 +172,7 @@ export default function QuizSection({
   return (
     <div className="flex flex-col justify-center items-center p-4 mb-24">
       <div className="bg-white rounded-md shadow-lg w-full max-w-md">
-        <h1 className="bg-blue-700 text-white px-4 py-3 font-bold rounded-t-md text-center">
+        <h1 className="bg-purpleBg text-gray-800 px-4 py-3 font-bold rounded-t-md text-center">
           {quiz.question}
         </h1>
         <ul className="flex flex-col gap-3 mt-4 p-4">
