@@ -5,7 +5,7 @@ import data from "@/data/data";
 
 export default function Footer() {
     return (
-        <div className="absolute left-0 w-full border-t p-4 flex md:flex-row items-start md:items-center hidden md:flex"> {/* Utilisation de flex uniquement pour les éléments enfants */}
+        <div className="relative flex items-center h-16 px-4 w-full desktop:h-24 hidden mx-auto md:flex desktop:w-3/4"> {/* Utilisation de flex uniquement pour les éléments enfants */}
             <div className="mr-8"> {/* Section logo alignée à gauche */}
                 <Link href={"/"}>
                     <Image
