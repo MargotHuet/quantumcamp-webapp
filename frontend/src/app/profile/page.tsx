@@ -108,6 +108,12 @@ export default function Profile() {
             <p>Email : {userData?.email}</p>
             <UserCompletedChapters userId={session.user.id} />
             <button
+              onClick={() => router.push('/updatePassword')}
+              className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
+            >
+              Modifier le mot de passe
+            </button>
+            <button
               onClick={() => setModalOpen(true)}
               className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
             >
