@@ -42,17 +42,23 @@ export default function UpdatePasswordPage() {
   };
 
   return (
-    <div>
-      <h1>Réinitialiser votre mot de passe</h1>
+    <div className='flex flex-col h-screen text-md font-anekDeva items-center justify-start md:justify-center md:py-46 lg:justify-center lg:h-2/6 px-4 py-64'>
+      <h1 className="w-3/4 lg:w-1/6">Réinitialiser votre mot de passe</h1>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <input
+        className='bg-blue-200 w-80 h-10 my-6 px-2'
         type="password"
         placeholder="Entrez un nouveau mot de passe"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handlePasswordUpdate}>Mettre à jour</button>
+      <button 
+        onClick={handlePasswordUpdate}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Mettre à jour
+       </button>
     </div>
   );
 }

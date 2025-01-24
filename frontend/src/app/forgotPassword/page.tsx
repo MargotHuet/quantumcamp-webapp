@@ -39,12 +39,12 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="text-lg">
-      <p>Mot de passe oublié ? Saisissez votre email pour réinitialiser votre mot de passe.</p>
+    <div className="flex flex-col h-screen text-md font-anekDeva items-center justify-start md:justify-center md:py-46 lg:justify-center lg:h-2/6 px-4 py-64">
+      <p className="w-3/4 lg:w-2/6">Mot de passe oublié ? Saisissez votre email pour réinitialiser votre mot de passe.</p>
       {message && <p className="text-green-500">{message}</p>}
       {error && <p className="text-red-500">{error}</p>}
       <input
-        className="bg-blue-200 w-80 h-10 my-2 px-2"
+        className="bg-blue-200 w-80 h-10 my-6 px-2"
         type="email"
         name="email"
         placeholder="Adresse email"
@@ -56,7 +56,7 @@ export default function ForgotPassword() {
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         onClick={handlePasswordReset}
       >
-        Réinitialiser le mot de passe
+        Confirmer
       </button>
     </div>
   );
