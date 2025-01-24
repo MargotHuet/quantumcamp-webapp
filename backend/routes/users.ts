@@ -116,25 +116,30 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   }
 
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:3020/updatePassword',
+    });
 
     if (error) {
+      console.error('Erreur lors de l\'envoi de l\'email de réinitialisation :', error);
       return res.status(400).json({ error: error.message });
     }
 
-    return res.status(200).json({ message: 'Password reset email sent successfully.' });
+    return res.status(200).json({ message: 'Email de réinitialisation envoyé avec succès.' });
   } catch (err) {
-    console.error("Error sending password reset email:", err);
-    return res.status(500).json({ error: 'Internal server error.' });
+    console.error('Erreur interne lors de l\'envoi de l\'email :', err);
+    return res.status(500).json({ error: 'Erreur interne du serveur.' });
   }
 });
 
-// Route pour vérifier le token
 router.post('/verify-token', async (req: Request, res: Response) => {
   const { accessToken, refreshToken } = req.body;
 
+  console.log('Access Token:', accessToken);
+  console.log('Refresh Token:', refreshToken);
+
   if (!accessToken || !refreshToken) {
-    return res.status(400).json({ error: 'Access and refresh tokens are required.' });
+    return res.status(400).json({ error: 'Les tokens d\'accès et de rafraîchissement sont requis.' });
   }
 
   try {
@@ -144,22 +149,47 @@ router.post('/verify-token', async (req: Request, res: Response) => {
     });
 
     if (error) {
-      return res.status(401).json({ error: 'Invalid or expired token.' });
+      console.error('Erreur Supabase:', error);
+      return res.status(401).json({ error: 'Le lien est invalide ou expiré.' });
     }
 
-    return res.status(200).json({ message: 'Token verified.' });
+    return res.status(200).json({ message: 'Token vérifié avec succès.' });
   } catch (err) {
-    console.error("Error verifying token:", err);
-    return res.status(500).json({ error: 'Internal server error.' });
+    console.error('Erreur lors de la vérification du token :', err);
+    return res.status(500).json({ error: 'Erreur interne du serveur.' });
   }
 });
 
-// Route pour mettre à jour le mot de passe
+
+// RESET 
+router.post('/reset-password', async (req: Request, res: Response) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: 'Le mot de passe est requis pour réinitialiser celui-ci.'});
+  }
+
+  try {
+    const { data, error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      console.error('Erreur lors de la mise à jour du mot de passe :', error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
+  } catch (err) {
+    console.error('Erreur interne lors de la réinitialisation du mot de passe :', err);
+    return res.status(500).json({ error: 'Erreur interne du serveur.' });
+  }
+});
+
+
 router.post('/update-password', async (req: Request, res: Response) => {
   const { password } = req.body;
 
   if (!password) {
-    return res.status(400).json({ error: 'Password is required.' });
+    return res.status(400).json({ error: 'Le mot de passe est requis.' });
   }
 
   try {
@@ -169,12 +199,13 @@ router.post('/update-password', async (req: Request, res: Response) => {
       return res.status(400).json({ error: error.message });
     }
 
-    return res.status(200).json({ message: 'Password updated successfully.' });
+    return res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
   } catch (err) {
-    console.error("Error updating password:", err);
-    return res.status(500).json({ error: 'Internal server error.' });
+    console.error('Erreur lors de la mise à jour du mot de passe :', err);
+    return res.status(500).json({ error: 'Erreur interne du serveur.' });
   }
 });
+
 
 // Route DELETE pour supprimer l'utilisateur connecté
 router.delete('/delete', async (req, res) => {
