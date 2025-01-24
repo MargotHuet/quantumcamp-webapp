@@ -116,7 +116,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   }
 
   try {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'http://localhost:3020/updatePassword',
     });
 
@@ -170,7 +170,7 @@ router.post('/reset-password', async (req: Request, res: Response) => {
   }
 
   try {
-    const { data, error } = await supabase.auth.updateUser({ password });
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       console.error('Erreur lors de la mise à jour du mot de passe :', error);
@@ -183,7 +183,6 @@ router.post('/reset-password', async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Erreur interne du serveur.' });
   }
 });
-
 
 router.post('/update-password', async (req: Request, res: Response) => {
   const { password } = req.body;
