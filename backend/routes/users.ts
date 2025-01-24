@@ -117,7 +117,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
 
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3020/updatePassword',
+      redirectTo: 'https://quantumcamp.adaschool.fr/updatePassword',
     });
 
     if (error) {
