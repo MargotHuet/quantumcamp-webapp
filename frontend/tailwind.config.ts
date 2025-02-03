@@ -19,7 +19,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       backgroundColor: {
-        creamWhite: "#F8F7FF"
+        creamWhite: "#fdfcff"
       },
       screens: {
         'mobile': '380px',
