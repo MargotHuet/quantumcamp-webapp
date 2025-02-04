@@ -18,10 +18,9 @@ router.get('/quiz/:chapterId', async function(req: Request, res: Response) {
   if (!question || question.length === 0) {
     return res.status(404).json({ error: "No question found for this chapter" });
   }
-
-  // Renvoyer directement l'objet question au lieu d'un tableau
   res.status(200).json(question[0]);
 });
+
 
 
 // GET possibles answers and correct answer by chapterId
