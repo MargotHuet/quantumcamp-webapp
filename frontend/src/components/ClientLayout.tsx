@@ -10,9 +10,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <>
+    <div className="min-h-screen flex flex-col">
       {!noNavAndFooter && <Navbar />}
       {children}
       {!noNavAndFooter && <Footer />}
+      </div>
     </>
   );
 }
