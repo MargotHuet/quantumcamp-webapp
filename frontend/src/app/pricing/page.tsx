@@ -3,7 +3,7 @@ import PricingCard from "@/components/pricingCard";
 
 export default function Pricing() {
     return (
-        <div className="flex flex-col items-center bg-purpleBg px-4 py-8 sm:py-12 min-h-screen">
+        <div className="flex flex-col items-center bg-creamWhite px-4 py-8 sm:py-12 min-h-screen">
             <div className="mb-4 text-center">
                 <h1 className="mb-4 text-5xl sm:text-5xl font-black text-black">Tarifs</h1>
                 <p className="text-sm sm:text-2xl">Choisissez la formule qui répond à vos besoins.</p>
@@ -12,7 +12,7 @@ export default function Pricing() {
                 <PricingCard 
                     name="Gratuit"
                     description="Apprenez gratuitement"
-                    color="#f5f0fc"
+                    color="#e4d2fc"
                     price={0}
                     features={[ 'Accès gratuit' ]}
                     buttonText= {"Get Started"}
@@ -20,7 +20,7 @@ export default function Pricing() {
                 <PricingCard 
                     name="Premium"
                     description="Apprenez et obtenez une certification"
-                    color="#f5f0fc"
+                    color="#e4d2fc"
                     price={10}
                     features={[ "Tous les cours"]}
                     buttonText= {"Get Started"}

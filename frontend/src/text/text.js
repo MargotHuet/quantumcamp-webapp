@@ -24,7 +24,7 @@ const appText = {
             },
             homeCardsFullSection: {
                 title: "Pourquoi vous devriez apprendre l'informatique quantique ?",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor",
+                description: "L'informatique quantique révolutionne le calcul et ouvre des opportunités technologiques uniques. 🚀",
             },
             about: {
                 title1: "À propos de QuantumCamp",
