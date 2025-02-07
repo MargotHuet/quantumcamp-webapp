@@ -15,22 +15,22 @@ export default function HomeCardFullSection() {
                     {text.page.components.homeCardsFullSection.description}
                 </p>
             </div>
-            <div className="grid grid-flow-col grid-rows-3 gap-4 lg:items-center lg:justify-center lg:pl-12">
-                <div className="row-span-2 row-start-2">
+            <div className="flex flex-col gap-4 justify-center items-center lg:grid lg:grid-flow-col lg:grid-rows-3 lg:gap-8 lg:items-center lg:justify-center lg:pl-32">
+                <div className="lg:row-span-2 lg:row-start-2 w-1/2">
                     <HomeCardsSection 
                         name=""
                         description="Dépasser les limites des ordinateurs classiques"
                         color="#e4d2fc"
                     />
                 </div>
-                <div className="row-span-2 row-end-3">
+                <div className="lg:row-span-2 lg:row-end-3 w-1/2">
                     <HomeCardsSection 
                         name=""
                         description="Opportunités de carrière en pleine expansion"
                         color="#e4d2fc"
                     />
                 </div>
-                <div className="row-start-1 row-end-4">
+                <div className="lg:row-start-1 lg:row-end-4 w-1/2">
                     <HomeCardsSection 
                         name=""
                         description="Comprendre le futur de la technologie"
