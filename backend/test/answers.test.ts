@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 import request from "supertest";
 import express from "express";
 import { supabaseAdmin } from "../dist/backendSupabase.js";
-import { supabase } from "../dist/clientSupabase.js";
 import testRouter from "../test/routes/answersTest.js"
 import { seedTestDatabase } from "../dist/test/seedTestDb.js";
 
