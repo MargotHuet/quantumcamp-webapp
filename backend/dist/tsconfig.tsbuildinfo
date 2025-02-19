@@ -1,1 +1,0 @@
-{"root":["../app.ts","../backendsupabase.ts","../clientsupabase.ts","../bin/www.ts","../routes/chapters.ts","../routes/index.ts","../routes/users.ts","../scripts/get_data.ts"],"version":"5.6.3"}

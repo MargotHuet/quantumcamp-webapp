@@ -9,26 +9,28 @@ cd frontend
 
 ## Backend
 
-cd backend 
+cd backend
 `npm run dev`
 
 ## Linter
+
 J'utilise ESLint pour structurer le code:
 
 cd frontend
 `npm run lint`
 
-cd backend 
+cd backend
 `npm run lint`
 
 ## Tests
+
 J'utilise Jest pour les tests unitaires:
 
-cd frontend 
+cd frontend
 `npm run test`
 
-
 ## Docker
+
 Pour lancer le frontend avec Docker:
 `docker run -p 3020:3020 quantumfrontend`
 
