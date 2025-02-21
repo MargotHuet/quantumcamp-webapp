@@ -5,24 +5,20 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
-// Définir __dirname dans un module ES
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
 import progressRouter from './routes/progress.js';
+// Définir __dirname dans un module ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 // Activer CORS
 app.use(cors({
-    origin: ['http://localhost:3020', 'http://188.165.238.74:3020'],
+    origin: ['http://localhost:3020', 'http://188.165.238.74:3020', 'https://quantumcamp.adaschool.fr'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-app.get('/products/:id', function (req, res) {
-    res.json({ msg: 'This is CORS-enabled for all origins!' });
-});
 // Configuration du moteur de vues
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -31,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
+// Routers
 app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);

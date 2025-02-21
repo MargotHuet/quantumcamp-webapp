@@ -1,17 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "outDir": "./dist",
-    "rootDir": "./",
+  //  "skipLibCheck": true,
+    "outDir": "./dist", // Dossier de sortie pour les fichiers compilés (.js et .d.ts)
+    "rootDir": "./", // Dossier racine contenant les fichiers sources (.ts)
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types"]
+    "types": ["node", "jest"], // Inclure les types pour Node.js et Jest
+   // "typeRoots": ["./node_modules/@types", "./types"], // Dossier pour les fichiers .d.ts personnalisés
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+   // "esModuleInterop": true,
+    //"resolveJsonModule": true,
+    //"declaration": true, // Générer des fichiers .d.ts pour les modules TypeScript
+    //"declarationDir": "./dist", // Dossier pour les fichiers .d.ts générés
   },
-  "include": ["**/*.ts", "routes/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "**/*.ts", // Inclure tous les fichiers .ts dans le projet
+    "routes/**/*.ts",
+    "clientSupabase.ts",
+    "backendSupabase.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"] // Exclure les dossiers node_modules et dist
 }
