@@ -133,7 +133,7 @@ router.post('/verify-token', async (req, res) => {
         return res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
 });
-// RESET 
+// POST reset user password 
 router.post('/reset-password', async (req, res) => {
     const { password } = req.body;
     if (!password) {
@@ -152,6 +152,7 @@ router.post('/reset-password', async (req, res) => {
         return res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
 });
+// POST user change password
 router.post('/update-password', async (req, res) => {
     const { password } = req.body;
     if (!password) {

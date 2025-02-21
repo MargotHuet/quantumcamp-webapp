@@ -12,8 +12,8 @@ app.use('/answersTest', testRouter);
 let chapterId;
 let server;
 beforeAll(async () => {
-    server = app.listen(process.env.PORT || 3000, () => {
-        console.log(`Server started on port ${process.env.PORT || 3000}`);
+    server = app.listen(process.env.PORT || 6000, () => {
+        console.log(`Server started on port ${process.env.PORT || 6000}`);
     });
     chapterId = await seedTestDatabase();
     console.log("Chapter ID for tests:", chapterId); // Afficher l'ID du chapitre pour le test
@@ -37,5 +37,14 @@ describe("GET /quiz/:chapterId", () => {
         console.log("Response received:", res.statusCode, res.body);
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual({ question: "Qu’est-ce qu’un qubit?" });
+    });
+});
+describe("GET /answers/:chapterId", () => {
+    it("should return the answers for a valid chapterId", async () => {
+        console.log("Testing with Chapter ID:", chapterId);
+        const res = await request(app).get(`/answersTest/answers/${chapterId}`);
+        console.log('Reponse recieved:', res.statusCode, res.body);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual([{ "possible_answer": "Superposition de 0 et de 1" }, { "possible_answer": "Utilisation de bits (0 et 1)" }, { "possible_answer": "Superposition de qubits" }, { "possible_answer": "Utilisation de 0 ou de 1" }]);
     });
 });
