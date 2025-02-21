@@ -22,7 +22,6 @@ router.get('/quiz/:chapterId', async function(req: Request, res: Response) {
 });
 
 
-
 // GET possibles answers and correct answer by chapterId
 router.get('/answers/:chapterId', async  function(req, res) {
   const { chapterId } = req.params;

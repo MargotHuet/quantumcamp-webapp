@@ -1,9 +1,12 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  preset: "ts-jest/presets/default-esm", // Utilise ts-jest pour les ESModules
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  esModuleInterop: true,
+  preset: "ts-jest/presets/default-esm", 
   transform: {},
   extensionsToTreatAsEsm: [".ts"],
-  testEnvironment: "node", // Environnement Node.js
+  testEnvironment: "node",
   moduleFileExtensions: ["ts", "js"],
   collectCoverageFrom: ["src/**/*.ts"],
   roots: ["<rootDir>/test"],

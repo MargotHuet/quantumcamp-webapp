@@ -33,4 +33,24 @@ testRouter.get("/quiz/:chapterId", async function (req: Request, res: Response) 
   res.status(200).json(question[0]);
 });
 
+// GET possible answers and correct answers by chapterId
+testRouter.get('/answers/:chapterId', async  function(req, res) {
+  const { chapterId } = req.params;
+
+  const { data, error } = await supabase
+    .from('answers')
+    .select('possible_answer')
+    .eq('chapter_id', chapterId);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ error: "No answers found for this chapter" });
+  }
+
+  res.json(data);
+});
+
 export default testRouter;

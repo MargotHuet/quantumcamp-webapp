@@ -160,8 +160,7 @@ router.post('/verify-token', async (req: Request, res: Response) => {
   }
 });
 
-
-// RESET 
+// POST reset user password 
 router.post('/reset-password', async (req: Request, res: Response) => {
   const { password } = req.body;
 
@@ -184,6 +183,7 @@ router.post('/reset-password', async (req: Request, res: Response) => {
   }
 });
 
+// POST user change password
 router.post('/update-password', async (req: Request, res: Response) => {
   const { password } = req.body;
 
@@ -204,7 +204,6 @@ router.post('/update-password', async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Erreur interne du serveur.' });
   }
 });
-
 
 // Route DELETE pour supprimer l'utilisateur connecté
 router.delete('/delete', async (req, res) => {
