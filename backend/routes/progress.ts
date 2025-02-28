@@ -1,6 +1,27 @@
 import express, { Request, Response } from 'express';
 import { supabase } from '../clientSupabase.js';
 
+/*
+  Ce fichier gère les routes backend relatives à la gestion de la progression des utilisateurs.
+
+  Routes disponibles :
+  - POST /save-progress : 
+      Permet de sauvegarder ou de mettre à jour la progression d'un utilisateur sur un chapitre.
+      La route vérifie d'abord l'existence et la validité d'un JWT dans l'en-tête Authorization, puis
+      compare l'ID de l'utilisateur avec celui présent dans le corps de la requête.
+      Ensuite, elle récupère les informations de la réponse (notamment si la réponse est correcte et l'ID du chapitre)
+      et insère ou met à jour un enregistrement dans la table 'completed_chapters' en fonction de l'existence
+      d'une progression précédente pour le chapitre.
+
+  - GET /completed-chapters/:userId : 
+      Récupère la liste des chapitres complétés par l'utilisateur spécifié par l'ID.
+      La réponse inclut l'ID du chapitre, l'état de complétion ainsi que le titre du chapitre, en filtrant sur
+      les enregistrements où le chapitre est terminé (is_finished true).
+
+  En cas d'erreur (problèmes d'authentification, validation ou erreurs Supabase), une réponse HTTP adéquate
+  (401, 403, 400, 404 ou 500) est renvoyée avec un message d'erreur explicite.
+*/
+
 const router = express.Router();
 
 router.post('/save-progress', async (req: Request, res: Response) => {

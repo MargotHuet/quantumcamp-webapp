@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, Session } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,9 +11,19 @@ const supabase = createClient(
 export default function UpdatePasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [session, setSession] = useState<Session | null>(null);
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const getSession = async () => {
+    const { data: { session }} = await supabase.auth.getSession();
+    setSession(session);
+    }
+
+    getSession();
+  }, [])
 
   useEffect(() => {
     supabase.auth.onAuthStateChange(async (event, session) => {
@@ -41,6 +51,16 @@ export default function UpdatePasswordPage() {
     }
   };
 
+  if (!session) {
+    return (
+      <section className="bg-creamWhite flex flex-col justify-center items-center min-h-screen">
+        <div className="mx-auto bg-blueBg p-4 rounded-lg shadow-lg space-y-8">
+          <p>Vous devez être connecté pour voir cette page.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className='flex flex-col h-screen text-md font-anekDeva items-center justify-start md:justify-center md:py-46 lg:justify-center lg:h-2/6 px-4 py-64'>
       <h1 className="w-3/4 lg:w-1/6">Réinitialiser votre mot de passe</h1>
@@ -59,6 +79,6 @@ export default function UpdatePasswordPage() {
       >
         Mettre à jour
        </button>
-    </div>
-  );
+    </div> 
+  )
 }
