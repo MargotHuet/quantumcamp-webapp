@@ -2,6 +2,23 @@ import express, { Request, Response } from 'express';
 import { supabase } from '../clientSupabase.js';
 import { supabaseAdmin } from '../backendSupabase.js';
 
+/*
+  Ce fichier gère les routes d'authentification et de gestion des utilisateurs pour le backend.
+
+  Routes disponibles :
+  - GET / : Récupère les informations d'un utilisateur connecté à partir d'un ID prédéfini via Supabase Admin.
+  - POST /signup : Crée un nouveau compte utilisateur avec nom, email et mot de passe (vérifie également la confirmation du mot de passe).
+  - POST /login : Authentifie un utilisateur avec email et mot de passe, et définit un cookie de session pour la gestion de l'authentification.
+  - POST /logout : Déconnecte l'utilisateur en supprimant le cookie de session.
+  - POST /forgot-password : Envoie un email de réinitialisation de mot de passe avec un lien de redirection.
+  - POST /verify-token : Vérifie la validité d'un couple de tokens (accès et rafraîchissement).
+  - POST /reset-password : Réinitialise le mot de passe de l'utilisateur.
+  - POST /update-password : Met à jour le mot de passe de l'utilisateur connecté.
+  - DELETE /delete : Supprime le compte de l'utilisateur, en le supprimant à la fois de Supabase Auth (via supabaseAdmin) et de la table 'users'.
+  
+  Chaque route effectue des vérifications de paramètres et gère les erreurs d'authentification et d'exécution en renvoyant des codes HTTP et messages adaptés.
+*/
+
 const router = express.Router();
 
 // Route GET pour récupérer les informations d'un utilisateur connecté
