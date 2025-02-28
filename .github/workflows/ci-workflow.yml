@@ -57,13 +57,6 @@ jobs:
           cd frontend
           npm run build
 
-      - name: 📝 Generate Release Notes for frontend
-        uses: release-drafter/release-drafter@v5
-        with:
-          config-name: release-drafter.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   back-end:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'pull_request'
@@ -93,10 +86,3 @@ jobs:
         run: |
           cd backend
           npm run lint
-
-      - name: 📝 Generate Release Notes for backend
-        uses: release-drafter/release-drafter@v5
-        with:
-          config-name: release-drafter.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
