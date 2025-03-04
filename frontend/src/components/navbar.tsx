@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from "react";
-// Importations nécessaires
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 import Link from "next/link";
 import Image from "next/image";
 import data from "../data/data";
-import { supabase } from "../../clientSupabase";
-import { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const [user, setUser] = useState<{ id: string; name?: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-    };
+      const checkAuth = async () => {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+          const response = await fetch(`${apiUrl}/users/check-auth`, {
+            credentials: "include",
+          });
+    
+          if (response.ok) {
+            setUser({ id: "authenticated" });
+          } else {
+            setUser(null);
+          }
+        } catch (error) {
+          setUser(null);
+        }
+      };
+    
+      checkAuth();
+    }, []);
 
-    getSession();
 
-    // Gérer les mises à jour de session (connexion / déconnexion)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe(); // Nettoyage du listener quand le composant est démonté
-  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -40,11 +44,21 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setSession(null); // Mise à jour de l'état après déconnexion
-    closeMenu();
-    router.push('/login');
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+      await fetch(`${apiUrl}/users/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+  
+      setUser(null);
+      closeMenu();
+      router.push("/login");
+    } catch (error) {
+      throw new Error("Erreur lors de la déconnexion.");
+    }
   };
+  
 
   return (
     <div className="relative flex items-center justify-between h-16 border-b-2 py-6 px-6 w-full md:w-4/5 lg:w-3/4 mx-auto">
@@ -80,7 +94,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-4 w-full lg:w-auto">
-          {session ? (
+          {user ? (
             <>
               <Link href="/profile" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
                 Profil

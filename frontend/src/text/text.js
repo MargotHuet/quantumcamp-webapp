@@ -11,6 +11,7 @@ const appText = {
                 contact: "Contact",
                 signup: "Inscription",
                 login: "Connexion",
+                cgu: "CGU",
             },
             homePage: {
                 title: "Apprenez l'informatique quantique.",

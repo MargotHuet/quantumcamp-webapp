@@ -1,25 +1,23 @@
 import express from 'express';
 import { supabase } from '../clientSupabase.js';
 import { supabaseAdmin } from '../backendSupabase.js';
+/*
+  Ce fichier gère les routes d'authentification et de gestion des utilisateurs pour le backend.
+
+  Routes disponibles :
+  - GET / : Récupère les informations d'un utilisateur connecté à partir d'un ID prédéfini via Supabase Admin.
+  - POST /signup : Crée un nouveau compte utilisateur avec nom, email et mot de passe (vérifie également la confirmation du mot de passe).
+  - POST /login : Authentifie un utilisateur avec email et mot de passe, et définit un cookie de session pour la gestion de l'authentification.
+  - POST /logout : Déconnecte l'utilisateur en supprimant le cookie de session.
+  - POST /forgot-password : Envoie un email de réinitialisation de mot de passe avec un lien de redirection.
+  - POST /verify-token : Vérifie la validité d'un couple de tokens (accès et rafraîchissement).
+  - POST /reset-password : Réinitialise le mot de passe de l'utilisateur.
+  - POST /update-password : Met à jour le mot de passe de l'utilisateur connecté.
+  - DELETE /delete : Supprime le compte de l'utilisateur, en le supprimant à la fois de Supabase Auth (via supabaseAdmin) et de la table 'users'.
+  
+  Chaque route effectue des vérifications de paramètres et gère les erreurs d'authentification et d'exécution en renvoyant des codes HTTP et messages adaptés.
+*/
 const router = express.Router();
-// Route GET pour récupérer les informations d'un utilisateur connecté
-router.get('/', async (req, res) => {
-    try {
-        const uid = "0669b347-6cbf-43c6-960e-1ee6b68e1869";
-        const { data: { user }, error, } = await supabase.auth.admin.getUserById(uid);
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
-        if (user) {
-            return res.status(200).json(user);
-        }
-        return res.status(404).json({ message: 'Utilisateur introuvable' });
-    }
-    catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
 // Route pour créer un compte utilisateur
 router.post('/signup', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
@@ -62,21 +60,29 @@ router.post('/login', async (req, res) => {
             console.error('Authentication error:', error.message);
             return res.status(401).json({ error: 'Incorrect credentials.' });
         }
-        // Définir le cookie avec le token d'accès
-        res.cookie('supabase-auth-token', data.session?.access_token, {
-            httpOnly: true, // Sécurise le cookie pour ne pas être accessible en JS
-            secure: true, // Passez à `true` en production (HTTPS)
-            sameSite: 'lax', // Empêche les attaques CSRF tout en autorisant les requêtes cross-origin nécessaires
-            maxAge: 60 * 60 * 24 * 7, // Expiration dans 7 jours
+        const accessToken = data.session?.access_token;
+        if (!accessToken) {
+            return res.status(500).json({ error: 'Aucune session créée. Vérifiez Supabase.' });
+        }
+        // cookies d'authentification
+        res.cookie('supabase-auth-token', accessToken, {
+            httpOnly: true,
+            secure: true, // Doit être false en local, true en production (HTTPS)
+            sameSite: 'none',
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7 * 1000, // 7 jours
         });
-        return res.status(200).json({
-            message: 'Connexion réussie.',
-            user: data.user,
+        res.cookie('sb-gvlffwiacxezqgrcdvtu-auth-token', accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7 * 1000,
         });
+        return res.status(200).json({ message: 'Connexion réussie.', user: data.user });
     }
     catch (err) {
-        const error = err;
-        console.error('Error logging in:', error.message);
+        console.error('Error logging in:', err.message);
         return res.status(500).json({ error: 'Internal server error.' });
     }
 });
@@ -86,6 +92,11 @@ router.post('/logout', (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
+    });
+    res.clearCookie('sb-gvlffwiacxezqgrcdvtu-auth-token', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
     });
     return res.status(200).json({ message: "Logout successful." });
 });
@@ -133,6 +144,30 @@ router.post('/verify-token', async (req, res) => {
         return res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
 });
+router.get('/account', async (req, res) => {
+    const token = req.cookies['supabase-auth-token'];
+    if (!token) {
+        return res.status(401).json({ error: "Pas de token, utilisateur non authentifié" });
+    }
+    try {
+        const { data: { user }, error } = await supabase.auth.getUser(token);
+        if (error || !user) {
+            return res.status(401).json({ error: "Token invalide ou expiré" });
+        }
+        return res.status(200).json({ user });
+    }
+    catch (err) {
+        console.error('Error fetching user:', err);
+        return res.status(500).json({ error: "Erreur interne serveur" });
+    }
+});
+router.get('/check-auth', (req, res) => {
+    const authToken = req.cookies['supabase-auth-token'];
+    if (!authToken) {
+        return res.status(401).json({ error: "Aucun cookie reçu. L'utilisateur n'est pas authentifié." });
+    }
+    return res.status(200).json({ message: "Cookie reçu", token: authToken });
+});
 // POST reset user password 
 router.post('/reset-password', async (req, res) => {
     const { password } = req.body;
@@ -155,28 +190,29 @@ router.post('/reset-password', async (req, res) => {
 // POST user change password
 router.post('/update-password', async (req, res) => {
     const { password } = req.body;
-    if (!password) {
-        return res.status(400).json({ error: 'Le mot de passe est requis.' });
+    const token = req.cookies["supabase-auth-token"];
+    if (!token) {
+        return res.status(401).json({ error: "Utilisateur non authentifié." });
     }
     try {
+        const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+        if (userError || !user) {
+            return res.status(401).json({ error: "Token invalide ou utilisateur non connecté." });
+        }
         const { error } = await supabase.auth.updateUser({ password });
         if (error) {
-            return res.status(400).json({ error: error.message });
+            return res.status(500).json({ error: error.message || "Erreur interne du serveur." });
         }
-        return res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
+        return res.status(200).json({ message: "Mot de passe mis à jour avec succès." });
     }
-    catch (err) {
-        console.error('Erreur lors de la mise à jour du mot de passe :', err);
-        return res.status(500).json({ error: 'Erreur interne du serveur.' });
+    catch (error) {
+        console.error("Erreur lors de la mise à jour du mot de passe :", error);
+        return res.status(500).json({ error: "Erreur interne du serveur." });
     }
 });
 // Route DELETE pour supprimer l'utilisateur connecté
 router.delete('/delete', async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).json({ error: 'Authorization header missing' });
-    }
-    const token = authHeader.split(' ')[1];
+    const token = req.cookies['supabase-auth-token'];
     if (!token) {
         return res.status(401).json({ error: 'Token missing in Authorization header' });
     }

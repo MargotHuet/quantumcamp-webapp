@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import BackButton from "@/components/backButton";
 import QuizSection from "@/components/QuizSection";
 import { useParams, useRouter } from "next/navigation";
-import { supabase } from "../../../../clientSupabase";
 
 interface Chapter {
   id: string;
@@ -15,26 +14,37 @@ export default function ChapterPage() {
   const { chapterId } = useParams();
   const router = useRouter();
   const [chapter, setChapter] = useState<Chapter | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string| null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Récupérer les informations utilisateur
   useEffect(() => {
-    const fetchUserId = async () => {
+    const fetchUser = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/users/account`, {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
           setUserId(null);
+          return;
+        }
+
+        const data = await response.json();
+        if (data.user && data.user.id) {
+          setUserId(data.user.id);
         } else {
-          setUserId(user.id);
+          setUserId(null);
         }
       } catch (error) {
+        console.error("Erreur lors de la récupération de l'utilisateur:", error);
         setUserId(null);
       }
     };
 
-    fetchUserId();
+    fetchUser();
   }, []);
 
   // Récupérer les données du chapitre
@@ -56,7 +66,6 @@ export default function ChapterPage() {
         const data = await response.json();
         setChapter(data);
       } catch (error) {
-        console.error("Fetch error:", error);
         setError(error instanceof Error ? error.message : String(error));
         setChapter(null);
       } finally {
