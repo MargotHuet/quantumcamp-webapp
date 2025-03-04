@@ -28,12 +28,7 @@ router.post('/save-progress', async (req: Request, res: Response) => {
     const { userId, answerId } = req.body;
   
     try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader) {
-        return res.status(401).json({ error: "Authorization header is missing" });
-      }
-  
-      const token = authHeader.split(" ")[1];
+      const token = req.cookies["supabase-auth-token"];
       if (!token) {
         return res.status(401).json({ error: "JWT token is missing" });
       }

@@ -1,70 +1,74 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "../../../clientSupabase";
-import { Session } from "@supabase/supabase-js"; 
+import { useRouter } from "next/navigation"; 
 import UserCompletedChapters from "@/components/UserCompletedChapters";
 import Modal from "@/components/Modals";
 
 interface UserData {
   name: string;
   email: string;
+  id: string;
 }
 
 export default function Profile() {
-  const [session, setSession] = useState<Session | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const router = useRouter();
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-  // Récupérer la session utilisateur
-  useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setLoading(false);
-    };
+  async function checkAuth() {
+    try {
+      const response = await fetch(`${apiUrl}/users/check-auth`, {
+        method: "GET",
+        credentials: "include",  // cookies
+      });
 
-    getSession();
-  }, []);
-
-  // Récupérer les données utilisateur
-  useEffect(() => {
-    if (session) {
-      const getUserData = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setUserData({
-            name: user.user_metadata?.name || "N/A",
-            email: user.email || "N/A",
-          });
-        }
-      };
-
-      getUserData();
+      const data = await response.json();
+    } catch (error) {
+      throw new Error("Erreur lors de la vérification des cookies.");
     }
-  }, [session]);
+  }
+
+  //  Récupère les informations utilisateur 
+  async function fetchUserData() {
+    try {
+      const response = await fetch(`${apiUrl}/users/account`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.user) {
+        setUserData({
+          name: data.user.user_metadata?.name || "Utilisateur inconnu",
+          email: data.user.email || "Email inconnu",
+          id: data.user.id,
+        });
+      } else {
+        router.push("/login");
+      }
+    } catch (error) {
+      router.push("/login");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    checkAuth();
+    fetchUserData();
+  }, []);
 
   // Supprimer le compte utilisateur
   const handleDeleteAccount = async () => {
     try {
       const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-
-      // Obtenir la session pour obtenir le token JWT
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Session missing or user not logged in");
-      }
-
-      // Appeler l'API pour supprimer l'utilisateur
       const response = await fetch(`${apiUrl}/users/delete`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -72,16 +76,11 @@ export default function Profile() {
       if (!response.ok) {
         throw new Error(data.error || "Erreur lors de la suppression du compte");
       }
-
-      // Déconnecter l'utilisateur et rediriger
-      await supabase.auth.signOut();
-      setSession(null);
       router.push("/signup");
-    } catch (error) {
-      console.error("Erreur lors de la suppression du compte:", error);
-      alert("Une erreur est survenue lors de la suppression du compte.");
+    } catch (error: any) {
+      alert(`Erreur:  ${error.message}`);
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -95,7 +94,7 @@ export default function Profile() {
 
   return (
     <>
-      {session ? (
+      {userData ? (
         <section className="bg-creamWhite flex flex-col items-center relative pt-4" style={{ minHeight: "100vh" }}>
           <p className="tracking-tight font-extrabold text-gray-900 text-4xl text-center w-full mb-6 mt-12">
             {userData?.name}
@@ -106,7 +105,7 @@ export default function Profile() {
           >
             <p>Nom : {userData?.name}</p>
             <p>Email : {userData?.email}</p>
-            <UserCompletedChapters userId={session.user.id} />
+            <UserCompletedChapters userId={userData?.id} />
             <button
               onClick={() => router.push('/updatePassword')}
               className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"

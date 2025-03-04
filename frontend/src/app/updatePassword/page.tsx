@@ -1,37 +1,42 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient, Session } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { useRouter } from 'next/navigation';
 
 export default function UpdatePasswordPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [session, setSession] = useState<Session | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
+  // Vérifier si l'utilisateur est connecté
   useEffect(() => {
-    const getSession = async () => {
-    const { data: { session }} = await supabase.auth.getSession();
-    setSession(session);
-    }
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/users/account`, {
+          method: "GET",
+          credentials: "include",
+        });
 
-    getSession();
-  }, [])
+        if (!response.ok) {
+          router.push("/login");
+          return;
+        }
 
-  useEffect(() => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setMessage('Vous pouvez maintenant définir un nouveau mot de passe.');
+        const data = await response.json();
+        if (data.user?.id) {
+          setUserId(data.user.id);
+        } else {
+          router.push("/login");
+        }
+      } catch (error) {
+        router.push("/login");
       }
-    });
-  }, []);
+    };
+
+    fetchUserData();
+  }, [apiUrl, router]);
 
   const handlePasswordUpdate = async () => {
     if (!password) {
@@ -40,9 +45,20 @@ export default function UpdatePasswordPage() {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
-
+      const response = await fetch(`${apiUrl}/users/update-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", 
+        body: JSON.stringify({ password }),
+      });
+  
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de la sauvegarde du nouveau mot de passe.");
+      }
+  
       setMessage('Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.');
       setPassword('');
       setError('');
@@ -51,7 +67,7 @@ export default function UpdatePasswordPage() {
     }
   };
 
-  if (!session) {
+  if (!userId) {
     return (
       <section className="bg-creamWhite flex flex-col justify-center items-center min-h-screen">
         <div className="mx-auto bg-blueBg p-4 rounded-lg shadow-lg space-y-8">
@@ -78,7 +94,7 @@ export default function UpdatePasswordPage() {
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
         Mettre à jour
-       </button>
+      </button>
     </div> 
   )
 }

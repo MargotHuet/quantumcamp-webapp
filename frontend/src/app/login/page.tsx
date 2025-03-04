@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { supabase } from "../../../clientSupabase";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modals";
 
@@ -32,20 +31,26 @@ export default function Login() {
 
     async function handleSubmit(e: any) {
         e.preventDefault();
-
+    
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: formData.email,
-                password: formData.password,
+            const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+            const response = await fetch(`${apiUrl}/users/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+                credentials: "include",  
             });
-
-            if (error) throw error;
-            router.push('/profile');
+    
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Erreur inconnue");
+    
+            router.push('/profile'); 
         } catch (error) {
             setError("Email ou mot de passe incorrects.");
             setMessage("");
             setOpen(true);
-            return;
         }
     }
 
