@@ -84,7 +84,7 @@ export default function Learn() {
         </div>
       ) : (
       <div className="flex flex-col text-md font-anekDeva items-center justify-center px-4 py-8 md:px-10 md:py-12 min-h-[75vh]">
-        <p>Vous devez être connecté pour voir cette page.
+        <div>Vous devez être connecté pour voir cette page.
           <div className="text-blue-500">
             <Link href="/signup">Inscrivez-vous</Link>
           </div>
@@ -92,7 +92,7 @@ export default function Learn() {
           <div className="text-blue-500">
             <Link href="/login">Connectez-vous</Link>
           </div>
-        </p>
+        </div>
       </div>
       )}
     </>

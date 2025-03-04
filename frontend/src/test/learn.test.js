@@ -12,12 +12,18 @@ import Learn from '../app/learn/page';
 import '@testing-library/jest-dom';
 
 global.fetch = jest.fn((url) => {
+  if (url.includes('/users/check-auth')) {  // ✅ Adapter au bon endpoint utilisé dans Learn.tsx
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ message: "User authenticated" }), // ✅ Réponse alignée avec Learn.tsx
+    });
+  }
   if (url.includes('/chapters/courses')) {
     return Promise.resolve({
       json: () =>
         Promise.resolve([
-          { id: '1', title: 'Course 1', is_finished: true, chapter_id: 1, created_at: 123 },
-          { id: '2', title: 'Course 2', is_finished: false, chapter_id: 2, created_at: 124 },
+          { id: '1', title: 'Introduction à l\'informatique quantique: notions', is_finished: true, chapter_id: 1, created_at: 123 },
+          { id: '2', title: 'Algorithmes quantiques', is_finished: false, chapter_id: 2, created_at: 124 },
         ]),
     });
   }
@@ -32,6 +38,26 @@ describe('Learn Component', () => {
   });
 
   test('displays course if user is logged in', async () => {
+    fetch.mockImplementationOnce((url) => {
+      if (url.includes('/users/check-auth')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ message: "User authenticated" }),  // ✅ Correspond à ce que Learn.tsx attend
+        });
+      }
+      if (url.includes('/chapters/courses')) {
+        return Promise.resolve({
+          json: () => Promise.resolve([
+            { id: '1', title: "Introduction à l'informatique quantique: notions", is_finished: true, chapter_id: 1, created_at: 123 },
+            { id: '2', title: "Algorithmes quantiques", is_finished: false, chapter_id: 2, created_at: 124 },
+          ]),
+        });
+      }
+      return Promise.resolve({
+        json: () => Promise.resolve({}),
+      });
+    });
+
     await act(async () => {
       render(<Learn />);
     });
@@ -39,21 +65,36 @@ describe('Learn Component', () => {
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
 
     await waitFor(() => {
-      expect(screen.getByText('Course 1')).toBeInTheDocument();
-      expect(screen.getByText('Course 2')).toBeInTheDocument();
+      expect(screen.getByText('Introduction à l\'informatique quantique: notions')).toBeInTheDocument();
+      expect(screen.getByText('Algorithmes quantiques')).toBeInTheDocument();
     });
   });
 
-  test('displays No courses available if user is not logged in', async () => {
-    fetch.mockImplementationOnce(() =>
-      Promise.resolve({ json: () => Promise.resolve([]) })
-    );
+  test('displays link to login or signup if user is not logged in', async () => {
+    fetch.mockImplementationOnce((url) => {
+      if (url.includes('/users/check-auth')) {
+        return Promise.resolve({
+          ok: false, 
+          json: () => Promise.resolve({}),
+        });
+      }
+      if (url.includes('/chapters/courses')) {
+        return Promise.resolve({
+          json: () => Promise.resolve([]), 
+        });
+      }
+      return Promise.resolve({
+        json: () => Promise.resolve({}),
+      });
+    });
 
     await act(async () => {
       render(<Learn />);
     });
 
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
-    expect(screen.getByText('No courses available.')).toBeInTheDocument();
+    expect(screen.getByText(/Vous devez être connecté pour voir cette page/i)).toBeInTheDocument();
+    expect(screen.getByText('Inscrivez-vous')).toBeInTheDocument();
+    expect(screen.getByText('Connectez-vous')).toBeInTheDocument();
   });
 });

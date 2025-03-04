@@ -254,8 +254,9 @@ router.post('/update-password', async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: "Mot de passe mis à jour avec succès." });
   } catch (error) {
+    console.error("Erreur interne du serveur :", error);
     return res.status(500).json({ error: "Erreur interne du serveur." });
-  }
+}
 });
 
 // Route DELETE pour supprimer l'utilisateur connecté
