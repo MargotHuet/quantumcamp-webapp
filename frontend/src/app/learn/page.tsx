@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Session } from "@supabase/supabase-js";
-import { supabase } from "../../../clientSupabase";
 
 interface Course {
   id: string;
@@ -13,18 +11,30 @@ interface Course {
 
 export default function Learn() {
   const [courses, setCourses] = useState<Course[] | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<{ id: string; } | null>(null);
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setLoading(false);
+    const checkAuth = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+        const response = await fetch(`${apiUrl}/users/check-auth`, {
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          setUser({ id: "authenticated" });
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        setUser(null);
+      }
     };
-
-    getSession();
+  
+    checkAuth();
   }, []);
+    
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -57,7 +67,7 @@ export default function Learn() {
 
   return (
     <>
-      {session ? (
+      {user ? (
         <div className="flex flex-col items-center justify-center bg-creamWhite px-4 py-8 md:px-10 md:py-12 min-h-screen">
           <h1 className="text-2xl md:text-4xl font-bold mb-6">Sommaire</h1>
           <div className="flex flex-col w-full max-w-lg bg-blueBg rounded-lg p-4 md:p-6 text-center">
@@ -74,7 +84,7 @@ export default function Learn() {
         </div>
       ) : (
       <div className="flex flex-col text-md font-anekDeva items-center justify-center px-4 py-8 md:px-10 md:py-12 min-h-[75vh]">
-        <p>Vous devez être connecté pour voir cette page.
+        <div>Vous devez être connecté pour voir cette page.
           <div className="text-blue-500">
             <Link href="/signup">Inscrivez-vous</Link>
           </div>
@@ -82,7 +92,7 @@ export default function Learn() {
           <div className="text-blue-500">
             <Link href="/login">Connectez-vous</Link>
           </div>
-        </p>
+        </div>
       </div>
       )}
     </>

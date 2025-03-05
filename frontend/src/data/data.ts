@@ -12,6 +12,9 @@ account: [
   { label: `${text.page.components.navigation.login}`, href: "login" },
   { label: `${text.page.components.navigation.signup}`, href: "signup" },
   ],
+  footer: [
+    { label: `${text.page.components.navigation.cgu}`, href: "cgu" },
+  ]
 }
 
 export default textData;

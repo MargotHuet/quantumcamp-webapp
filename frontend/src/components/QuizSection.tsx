@@ -1,6 +1,5 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../clientSupabase";
 
 interface Chapter {
   id: string;
@@ -42,58 +41,26 @@ export default function QuizSection({
 
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-        // Récupérer les informations du chapitre actuel
-        const chapterResponse = await fetch(`${apiUrl}/chapters/${chapterId}`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+        const [chapterResponse, questionResponse, answersResponse] = await Promise.all([
+          fetch(`${apiUrl}/chapters/${chapterId}`, { credentials: "include" }),
+          fetch(`${apiUrl}/answers/quiz/${chapterId}`, { credentials: "include" }),
+          fetch(`${apiUrl}/answers/answers/${chapterId}`, { credentials: "include" })
+        ]);
 
-        if (!chapterResponse.ok) {
-          throw new Error(
-            `Échec de la récupération du chapitre : ${chapterResponse.statusText}`
-          );
+        if (!chapterResponse.ok || !questionResponse.ok || !answersResponse.ok) {
+          throw new Error("Erreur lors de la récupération des données");
         }
 
         const chapterData: Chapter = await chapterResponse.json();
-        setChapter(chapterData);
-
-        // Récupérer le quiz associé au chapitre
-        const questionResponse = await fetch(`${apiUrl}/answers/quiz/${chapterId}`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!questionResponse.ok) {
-          throw new Error(
-            `Échec de la récupération de la question : ${questionResponse.statusText}`
-          );
-        }
-
         const questionData = await questionResponse.json();
-
-        const answersResponse = await fetch(`${apiUrl}/answers/answers/${chapterId}`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!answersResponse.ok) {
-          throw new Error(
-            `Échec de la récupération des réponses : ${answersResponse.statusText}`
-          );
-        }
-
         const answersData = await answersResponse.json();
 
+        setChapter(chapterData);
         setQuiz({
           question: questionData.question,
           answers: answersData,
         });
+
       } catch (error) {
         setError(error instanceof Error ? error.message : String(error));
         setChapter(null);
@@ -111,43 +78,32 @@ export default function QuizSection({
       console.error("Utilisateur non connecté.");
       return;
     }
-
+  
     setSelectedAnswerId(answerId);
     setIsCorrect(isCorrect);
-
+  
     if (isCorrect) {
       setShowNextButton(true);
-
-      // Appel à l'API pour sauvegarder la progression
+  
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session || !session.access_token) {
-          throw new Error("Token d'authentification manquant.");
-        }
-
         const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+  
         const response = await fetch(`${apiUrl}/progress/save-progress`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`, // Inclure le token JWT
-          },
-          body: JSON.stringify({
-            userId,
-            answerId,
-          }),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", 
+          body: JSON.stringify({ userId, answerId }),
         });
-
+  
         if (!response.ok) {
           throw new Error(`Erreur API : ${response.statusText}`);
         }
-
-        const result = await response.json();
       } catch (error) {
-        console.error("Erreur lors de la sauvegarde de la progression :", error);
+        throw new Error("Erreur lors de la sauvegarde de la progression.");
       }
     }
   };
+  
 
   const handleNextQuiz = () => {
     if (chapter?.next_chapter_id) {
