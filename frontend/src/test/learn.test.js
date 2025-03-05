@@ -12,13 +12,13 @@ import Learn from '../app/learn/page';
 import '@testing-library/jest-dom';
 
 global.fetch = jest.fn((url) => {
-  if (url.includes('/users/check-auth')) {  // ✅ Adapter au bon endpoint utilisé dans Learn.tsx
+  if (url.includes('/users/check-auth')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve({ message: "User authenticated" }), // ✅ Réponse alignée avec Learn.tsx
+      json: () => Promise.resolve({ message: "User authenticated" }),
     });
   }
-  if (url.includes('/chapters/courses')) {
+  if (url.includes('/courses/courses')) {
     return Promise.resolve({
       json: () =>
         Promise.resolve([
@@ -42,10 +42,10 @@ describe('Learn Component', () => {
       if (url.includes('/users/check-auth')) {
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ message: "User authenticated" }),  // ✅ Correspond à ce que Learn.tsx attend
+          json: () => Promise.resolve({ message: "User authenticated" }),  
         });
       }
-      if (url.includes('/chapters/courses')) {
+      if (url.includes('/courses/courses')) {
         return Promise.resolve({
           json: () => Promise.resolve([
             { id: '1', title: "Introduction à l'informatique quantique: notions", is_finished: true, chapter_id: 1, created_at: 123 },
@@ -78,7 +78,7 @@ describe('Learn Component', () => {
           json: () => Promise.resolve({}),
         });
       }
-      if (url.includes('/chapters/courses')) {
+      if (url.includes('/courses/courses')) {
         return Promise.resolve({
           json: () => Promise.resolve([]), 
         });

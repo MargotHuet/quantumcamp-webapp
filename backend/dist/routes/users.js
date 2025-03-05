@@ -4,17 +4,20 @@ import { supabaseAdmin } from '../backendSupabase.js';
 /*
   Ce fichier gère les routes d'authentification et de gestion des utilisateurs pour le backend.
 
-  Routes disponibles :
-  - GET / : Récupère les informations d'un utilisateur connecté à partir d'un ID prédéfini via Supabase Admin.
-  - POST /signup : Crée un nouveau compte utilisateur avec nom, email et mot de passe (vérifie également la confirmation du mot de passe).
-  - POST /login : Authentifie un utilisateur avec email et mot de passe, et définit un cookie de session pour la gestion de l'authentification.
-  - POST /logout : Déconnecte l'utilisateur en supprimant le cookie de session.
-  - POST /forgot-password : Envoie un email de réinitialisation de mot de passe avec un lien de redirection.
-  - POST /verify-token : Vérifie la validité d'un couple de tokens (accès et rafraîchissement).
-  - POST /reset-password : Réinitialise le mot de passe de l'utilisateur.
-  - POST /update-password : Met à jour le mot de passe de l'utilisateur connecté.
-  - DELETE /delete : Supprime le compte de l'utilisateur, en le supprimant à la fois de Supabase Auth (via supabaseAdmin) et de la table 'users'.
-  
+   Routes disponibles :
+  - **POST /users/signup** : Crée un nouveau compte utilisateur avec un nom, un email et un mot de passe.
+  - **POST /users/login** : Authentifie un utilisateur avec un email et un mot de passe, et définit un cookie d'authentification.
+  - **POST /users/logout** : Déconnecte l'utilisateur en supprimant les cookies d'authentification.
+  - **POST /users/forgot-password** : Envoie un email de réinitialisation de mot de passe.
+  - **GET /users/account** : Récupère les informations de l'utilisateur connecté à partir de son token.
+  - **GET /users/check-auth** : Vérifie si l'utilisateur est connecté en validant la présence d'un cookie d'authentification.
+  - **POST /users/update-password** : Met à jour le mot de passe de l'utilisateur connecté.
+  - **DELETE /users/delete** : Supprime le compte de l'utilisateur, en le supprimant de Supabase Auth (via `supabaseAdmin`) et de la table `users`.
+
+   Sécurité & gestion des erreurs :
+  - Chaque route effectue des vérifications de paramètres et de tokens pour éviter les accès non autorisés.
+  - L'authentification repose sur un token JWT stocké dans un cookie sécurisé (`supabase-auth-token`).
+
   Chaque route effectue des vérifications de paramètres et gère les erreurs d'authentification et d'exécution en renvoyant des codes HTTP et messages adaptés.
 */
 const router = express.Router();
@@ -79,7 +82,7 @@ router.post('/login', async (req, res) => {
             path: '/',
             maxAge: 60 * 60 * 24 * 7 * 1000,
         });
-        return res.status(200).json({ message: 'Connexion réussie.', user: data.user });
+        return res.status(200).json({ message: 'Connexion réussie.' });
     }
     catch (err) {
         console.error('Error logging in:', err.message);
@@ -95,7 +98,7 @@ router.post('/logout', (req, res) => {
     });
     res.clearCookie('sb-gvlffwiacxezqgrcdvtu-auth-token', {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'lax',
     });
     return res.status(200).json({ message: "Logout successful." });
@@ -121,29 +124,7 @@ router.post('/forgot-password', async (req, res) => {
         return res.status(500).json({ error: 'Erreur interne du serveur.' });
     }
 });
-router.post('/verify-token', async (req, res) => {
-    const { accessToken, refreshToken } = req.body;
-    console.log('Access Token:', accessToken);
-    console.log('Refresh Token:', refreshToken);
-    if (!accessToken || !refreshToken) {
-        return res.status(400).json({ error: 'Les tokens d\'accès et de rafraîchissement sont requis.' });
-    }
-    try {
-        const { error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-        });
-        if (error) {
-            console.error('Erreur Supabase:', error);
-            return res.status(401).json({ error: 'Le lien est invalide ou expiré.' });
-        }
-        return res.status(200).json({ message: 'Token vérifié avec succès.' });
-    }
-    catch (err) {
-        console.error('Erreur lors de la vérification du token :', err);
-        return res.status(500).json({ error: 'Erreur interne du serveur.' });
-    }
-});
+// Récupère les informations de l'utilisateur connecté
 router.get('/account', async (req, res) => {
     const token = req.cookies['supabase-auth-token'];
     if (!token) {
@@ -161,31 +142,13 @@ router.get('/account', async (req, res) => {
         return res.status(500).json({ error: "Erreur interne serveur" });
     }
 });
+// Vérifie que l'utilisateur est connectéen validant la présence d'un cookie d'authentification
 router.get('/check-auth', (req, res) => {
     const authToken = req.cookies['supabase-auth-token'];
     if (!authToken) {
         return res.status(401).json({ error: "Aucun cookie reçu. L'utilisateur n'est pas authentifié." });
     }
     return res.status(200).json({ message: "Cookie reçu", token: authToken });
-});
-// POST reset user password 
-router.post('/reset-password', async (req, res) => {
-    const { password } = req.body;
-    if (!password) {
-        return res.status(400).json({ error: 'Le mot de passe est requis pour réinitialiser celui-ci.' });
-    }
-    try {
-        const { error } = await supabase.auth.updateUser({ password });
-        if (error) {
-            console.error('Erreur lors de la mise à jour du mot de passe :', error);
-            return res.status(400).json({ error: error.message });
-        }
-        return res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
-    }
-    catch (err) {
-        console.error('Erreur interne lors de la réinitialisation du mot de passe :', err);
-        return res.status(500).json({ error: 'Erreur interne du serveur.' });
-    }
 });
 // POST user change password
 router.post('/update-password', async (req, res) => {
@@ -206,7 +169,7 @@ router.post('/update-password', async (req, res) => {
         return res.status(200).json({ message: "Mot de passe mis à jour avec succès." });
     }
     catch (error) {
-        console.error("Erreur lors de la mise à jour du mot de passe :", error);
+        console.error("Erreur interne du serveur :", error);
         return res.status(500).json({ error: "Erreur interne du serveur." });
     }
 });
