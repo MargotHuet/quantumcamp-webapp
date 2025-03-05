@@ -6,8 +6,6 @@ import { QueryData } from "@supabase/supabase-js";
   Ce fichier "chapters.ts" gère les routes du backend pour récupérer les cours et les chapitres à partir de Supabase.
   
   Routes disponibles :
-  - GET /courses : Récupère tous les cours (sélectionne toutes les colonnes de la table "courses").
-  - GET /       : Récupère l'ensemble des chapitres en sélectionnant uniquement l'identifiant et le titre.
   - GET /:chapterId : Récupère un chapitre spécifique par son identifiant. La réponse inclut le contenu du chapitre
                       ainsi que l'identifiant du chapitre suivant, si disponible.
   
@@ -15,40 +13,6 @@ import { QueryData } from "@supabase/supabase-js";
 */
 
 const router = express.Router();
-
-// GET courses title
-const coursesQuery = supabase
-  .from("courses")
-  .select("*");
-type Courses = QueryData<typeof coursesQuery>;
-
-router.get('/courses', async function (req: Request, res: Response): Promise<void> {
-  const { data, error } = await coursesQuery;
-
-  if (error) {
-    res.status(500).send(error.message);
-    return;
-  }
-
-  res.json(data as Courses);
-});
-
-// GET full chapter
-const chaptersQuery = supabase
-  .from("chapters")
-  .select("id, title");
-type Chapters = QueryData<typeof chaptersQuery>;
-
-router.get('/', async function (req: Request, res: Response): Promise<void> {
-  const { data, error } = await chaptersQuery;
-
-  if (error) {
-    res.status(500).send(error.message);
-    return;
-  }
-
-  res.json(data as Chapters);
-});
 
 // GET chapter by Id
 router.get('/:chapterId', async function (req: Request, res: Response): Promise<void> {

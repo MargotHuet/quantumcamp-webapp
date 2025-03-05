@@ -12,10 +12,10 @@ import Learn from '../app/learn/page';
 import '@testing-library/jest-dom';
 
 global.fetch = jest.fn((url) => {
-  if (url.includes('/users/check-auth')) {  // ✅ Adapter au bon endpoint utilisé dans Learn.tsx
+  if (url.includes('/users/check-auth')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve({ message: "User authenticated" }), // ✅ Réponse alignée avec Learn.tsx
+      json: () => Promise.resolve({ message: "User authenticated" }),
     });
   }
   if (url.includes('/chapters/courses')) {
@@ -42,7 +42,7 @@ describe('Learn Component', () => {
       if (url.includes('/users/check-auth')) {
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ message: "User authenticated" }),  // ✅ Correspond à ce que Learn.tsx attend
+          json: () => Promise.resolve({ message: "User authenticated" }),  
         });
       }
       if (url.includes('/chapters/courses')) {

@@ -6,15 +6,13 @@ import { supabaseAdmin } from '../backendSupabase.js';
   Ce fichier gère les routes d'authentification et de gestion des utilisateurs pour le backend.
 
    Routes disponibles :
-  - **GET /users/account** : Récupère les informations de l'utilisateur connecté à partir de son token.
-  - **GET /users/check-auth** : Vérifie si l'utilisateur est connecté en validant la présence d'un cookie d'authentification.
   - **POST /users/signup** : Crée un nouveau compte utilisateur avec un nom, un email et un mot de passe.
   - **POST /users/login** : Authentifie un utilisateur avec un email et un mot de passe, et définit un cookie d'authentification.
   - **POST /users/logout** : Déconnecte l'utilisateur en supprimant les cookies d'authentification.
   - **POST /users/forgot-password** : Envoie un email de réinitialisation de mot de passe.
-  - **POST /users/reset-password** : Réinitialise le mot de passe de l'utilisateur (exécuté après réception du lien de réinitialisation).
+  - **GET /users/account** : Récupère les informations de l'utilisateur connecté à partir de son token.
+  - **GET /users/check-auth** : Vérifie si l'utilisateur est connecté en validant la présence d'un cookie d'authentification.
   - **POST /users/update-password** : Met à jour le mot de passe de l'utilisateur connecté.
-  - **POST /users/verify-token** : Vérifie la validité d'un couple de tokens (accès et rafraîchissement) pour maintenir la session active.
   - **DELETE /users/delete** : Supprime le compte de l'utilisateur, en le supprimant de Supabase Auth (via `supabaseAdmin`) et de la table `users`.
 
    Sécurité & gestion des erreurs :
@@ -148,34 +146,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/verify-token', async (req: Request, res: Response) => {
-  const { accessToken, refreshToken } = req.body;
-
-  console.log('Access Token:', accessToken);
-  console.log('Refresh Token:', refreshToken);
-
-  if (!accessToken || !refreshToken) {
-    return res.status(400).json({ error: 'Les tokens d\'accès et de rafraîchissement sont requis.' });
-  }
-
-  try {
-    const { error } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    });
-
-    if (error) {
-      console.error('Erreur Supabase:', error);
-      return res.status(401).json({ error: 'Le lien est invalide ou expiré.' });
-    }
-
-    return res.status(200).json({ message: 'Token vérifié avec succès.' });
-  } catch (err) {
-    console.error('Erreur lors de la vérification du token :', err);
-    return res.status(500).json({ error: 'Erreur interne du serveur.' });
-  }
-});
-
+// Récupère les informations de l'utilisateur connecté
 router.get('/account', async (req: Request, res: Response) => {
   const token = req.cookies['supabase-auth-token'];
 
@@ -197,6 +168,7 @@ router.get('/account', async (req: Request, res: Response) => {
   }
 });
 
+// Vérifie que l'utilisateur est connectéen validant la présence d'un cookie d'authentification
 router.get('/check-auth', (req: Request, res: Response) => {
   const authToken = req.cookies['supabase-auth-token'];
 
@@ -205,29 +177,6 @@ router.get('/check-auth', (req: Request, res: Response) => {
   }
 
   return res.status(200).json({ message: "Cookie reçu", token: authToken });
-});
-
-// POST reset user password 
-router.post('/reset-password', async (req: Request, res: Response) => {
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({ error: 'Le mot de passe est requis pour réinitialiser celui-ci.'});
-  }
-
-  try {
-    const { error } = await supabase.auth.updateUser({ password });
-
-    if (error) {
-      console.error('Erreur lors de la mise à jour du mot de passe :', error);
-      return res.status(400).json({ error: error.message });
-    }
-
-    return res.status(200).json({ message: 'Mot de passe mis à jour avec succès.' });
-  } catch (err) {
-    console.error('Erreur interne lors de la réinitialisation du mot de passe :', err);
-    return res.status(500).json({ error: 'Erreur interne du serveur.' });
-  }
 });
 
 // POST user change password

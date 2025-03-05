@@ -22,7 +22,7 @@ router.get('/courses', async function (req: Request, res: Response): Promise<voi
   const { data, error } = await coursesQuery;
 
   if (error) {
-    res.status(500).send("No courses available..");
+    res.status(500).send(error.message);
     return;
   }
 

@@ -10,6 +10,7 @@ import usersRouter from './routes/users.js';
 import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
 import progressRouter from './routes/progress.js';
+import coursesRouter from './routes/courses.js';
 
 // Définir __dirname dans un module ES
 const __filename = fileURLToPath(import.meta.url);
@@ -43,6 +44,7 @@ app.use('/users', usersRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);
 app.use('/progress', progressRouter);
+app.use('/courses', coursesRouter)
 
 
 // Gestion des erreurs 404
