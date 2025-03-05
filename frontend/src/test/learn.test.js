@@ -18,7 +18,7 @@ global.fetch = jest.fn((url) => {
       json: () => Promise.resolve({ message: "User authenticated" }),
     });
   }
-  if (url.includes('/chapters/courses')) {
+  if (url.includes('/courses/courses')) {
     return Promise.resolve({
       json: () =>
         Promise.resolve([
@@ -45,7 +45,7 @@ describe('Learn Component', () => {
           json: () => Promise.resolve({ message: "User authenticated" }),  
         });
       }
-      if (url.includes('/chapters/courses')) {
+      if (url.includes('/courses/courses')) {
         return Promise.resolve({
           json: () => Promise.resolve([
             { id: '1', title: "Introduction à l'informatique quantique: notions", is_finished: true, chapter_id: 1, created_at: 123 },
@@ -78,7 +78,7 @@ describe('Learn Component', () => {
           json: () => Promise.resolve({}),
         });
       }
-      if (url.includes('/chapters/courses')) {
+      if (url.includes('/courses/courses')) {
         return Promise.resolve({
           json: () => Promise.resolve([]), 
         });

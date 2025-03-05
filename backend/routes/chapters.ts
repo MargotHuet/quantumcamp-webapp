@@ -1,6 +1,5 @@
 import { supabase } from "../clientSupabase.js";
 import express, { Request, Response } from "express";
-import { QueryData } from "@supabase/supabase-js";
 
 /*
   Ce fichier "chapters.ts" gère les routes du backend pour récupérer les cours et les chapitres à partir de Supabase.
