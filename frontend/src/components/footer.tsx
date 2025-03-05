@@ -26,6 +26,15 @@ export default function Footer() {
                         {item.label}
                     </Link>
                 ))}
+                {data.footer.map((item, index) => (
+                    <Link
+                        key={`nav-${index}`}
+                        href={`${item.href}`}
+                        className="text-black cursor-pointer"
+                    >
+                        {item.label}
+                    </Link>
+                ))}
             </div>
         </div>
     );
