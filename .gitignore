@@ -46,3 +46,4 @@ bower_components/
 # IDE specific files
 .idea/
 .vscode/
+.qodo
