@@ -1,6 +1,5 @@
 services:
   - type: web
-    name: deployed-app
-    env: docker
-    dockerCommand: "docker-compose up"
+    name: fullstack-app
+    env: docker-compose
     plan: starter
