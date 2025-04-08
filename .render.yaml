@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: deployed-app
+    env: docker
+    dockerCommand: "docker-compose up"
+    plan: starter
