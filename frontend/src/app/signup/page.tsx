@@ -117,20 +117,34 @@ export default function Signup() {
         <>
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-col desktop:flex-row h-screen">
-                    {/* Desktop view */}
-                    <div className="hidden desktop:flex relative bg-blueBg w-2/5 h-full justify-center items-center">
-                        <Link href={"/"}>
-                            <Image
-                                src="/assets/QuantumCamp.png"
-                                alt="QuantumCamp logo"
-                                width={500}
-                                height={500}
-                                className="desktop:w-auto desktop:h-auto"
-                            />
-                        </Link>
+                   {/* Desktop view logo */}
+                   <div className="hidden desktop:flex relative bg-blue-200 w-2/5 h-full flex-col justify-center items-center">
+                    <Link href={"/"}>
+                        <Image
+                            src="/assets/QuantumCamp.png"
+                            alt="QuantumCamp logo"
+                            width={300}
+                            height={300}
+                            className="desktop:w-auto desktop:h-auto"
+                        />
+                    </Link>
                     </div>
                     {/* Form */}
                     <div className="flex flex-col h-screen w-full items-center py-28 desktop:w-3/5 desktop:h-6/6 desktop:justify-center">
+
+                    
+                    {/* Mobile logo centré au-dessus du texte */}
+                    <div className="desktop:hidden mb-6">
+                        <Link href={"/"}>
+                            <Image
+                                src="/assets/QuantumCamp.png"
+                                alt="QuantumCamp logo, returning home page"
+                                width={120}
+                                height={120}
+                                className="mx-auto"
+                            />
+                        </Link>
+                        </div>
                         <div className="text-center desktop:text-left mb-2">
                             <p className="text-2xl desktop:text-4xl font-firaSans">Créez votre compte</p>
                         </div>
