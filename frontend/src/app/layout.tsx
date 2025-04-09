@@ -11,13 +11,18 @@ import Script from 'next/script'
 export const metadata: Metadata = {
   title: "Quantum Camp",
   description: "Apprennez l'informatique quantique facilement.",
+  icons: {
+    icon: "/assets/quantum.png",
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const hasConsent = useConsent()
   return (
     <html lang="fr">
-      <head />
+      <head>
+      <link rel="icon" type="image/png" href="/public/assets/favicon.png" />
+     </head>
       <body style={{ fontFamily: 'Inter, sans-serif' }}>
         <GTM />
         <ClientLayout>
