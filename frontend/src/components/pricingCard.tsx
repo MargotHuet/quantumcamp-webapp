@@ -1,3 +1,5 @@
+'use client';
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface PricingCardProps {
@@ -10,6 +12,13 @@ interface PricingCardProps {
 }
 
 export default function PricingCard({name, description, price, color, features, buttonText = 'Start trial'}: PricingCardProps) {
+    const router = useRouter();
+
+    const freeGetStarted = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        router.push('/login');
+    }
+
     return (
         <div 
             style={{ backgroundColor: color}}
@@ -42,7 +51,9 @@ export default function PricingCard({name, description, price, color, features, 
                     </li>
                 ))}
             </ul>
-            <button className="mt-auto rounded-xl bg-black py-2 sm:py-3 px-4 sm:px-6 text-base sm:text-lg font-medium text-white">
+            <button 
+                className="mt-auto rounded-xl bg-black py-2 sm:py-3 px-4 sm:px-6 text-base sm:text-lg font-medium text-white"
+                onClick={freeGetStarted}>
                 {buttonText}
             </button>
         </div>
