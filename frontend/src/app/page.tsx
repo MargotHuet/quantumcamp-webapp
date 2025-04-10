@@ -3,7 +3,6 @@ import Image from "next/image";
 import React from "react";
 import text from '@/text/text';
 import HomeCardsFullSection from "./homeCardSection/page"
-import Pricing from "./pricing/page";
 
 // Landing page
 export default function Home() {

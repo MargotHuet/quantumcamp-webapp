@@ -17,14 +17,14 @@ export default function Pricing() {
                     features={[ 'Accès gratuit' ]}
                     buttonText= {"Get Started"}
                 />
-                <PricingCard 
+               {/*} <PricingCard 
                     name="Premium"
                     description="Apprenez et obtenez une certification"
                     color="#e4d2fc"
                     price={10}
                     features={[ "Tous les cours"]}
                     buttonText= {"Get Started"}
-                />
+                /> */}
             </div>
         </div>
     )
