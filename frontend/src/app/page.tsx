@@ -11,7 +11,7 @@ export default function Home() {
       <section className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-purple-100 via-blue-50 to-white rounded-3xl shadow-2xl p-8 md:p-16 min-h-[80vh] overflow-hidden">
 
         {/* Image à gauche */}
-        <div className="hidden md:w-full md:w-1/3 md:ml-20 md:flex md:justify-center md:justify-start mb-8 md:mb-0">
+        <div className="hidden md:w-1/2 md:ml-20 md:flex md:justify-center md:justify-start mb-8 md:mb-0">
           <Image  
             src="/assets/quantum.png" 
             alt="Quantum Camp Logo" 
