@@ -7,6 +7,7 @@ const appText = {
             navigation: {
                 learn: "Apprendre",
                 pricing: "Tarifs",
+                blog: "Blog",
                 about: "À propos",
                 contact: "Contact",
                 signup: "Inscription",
