@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://quantumcamp.fr
+
+# Sitemaps
+Sitemap: https://quantumcamp.fr/sitemap.xml

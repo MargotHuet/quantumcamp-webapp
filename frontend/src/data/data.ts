@@ -5,6 +5,7 @@ const textData = {
 navigation: [
     { label: `${text.page.components.navigation.learn}`, href: "learn" },
     { label: `${text.page.components.navigation.pricing}`, href: "pricing" },
+    { label: `${text.page.components.navigation.blog}`, href: "blog" },
     { label: `${text.page.components.navigation.about}`, href: "about" },
     { label: `${text.page.components.navigation.contact}`, href: "contact" },
   ],
