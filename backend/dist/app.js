@@ -10,13 +10,20 @@ import chaptersRouter from './routes/chapters.js';
 import answersRouter from './routes/answers.js';
 import progressRouter from './routes/progress.js';
 import coursesRouter from './routes/courses.js';
+import blogRouter from './routes/blog.js';
 // Définir __dirname dans un module ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 // Activer CORS
 app.use(cors({
-    origin: ['http://localhost:3020', 'http://188.165.238.74:3020', 'https://quantumcamp.adaschool.fr'],
+    origin: [
+        'http://localhost:3020',
+        'http://188.165.238.74:3020',
+        'https://quantumcamp.fr',
+        'https://www.quantumcamp.fr',
+        'https://api.quantumcamp.fr'
+    ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -34,6 +41,7 @@ app.use('/chapters', chaptersRouter);
 app.use('/answers', answersRouter);
 app.use('/progress', progressRouter);
 app.use('/courses', coursesRouter);
+app.use('/blog', blogRouter);
 // Gestion des erreurs 404
 app.use(function (req, res, next) {
     next(createError(404));
