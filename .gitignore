@@ -47,3 +47,6 @@ bower_components/
 .idea/
 .vscode/
 .qodo
+
+# Site map files
+frontend/public/sitemap-*.xml
