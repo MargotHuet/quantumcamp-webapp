@@ -17,3 +17,6 @@ logs
 # Build output
 dist/
 out/
+
+# Site map files
+public/sitemap-*.xml
