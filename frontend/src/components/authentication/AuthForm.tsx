@@ -15,7 +15,7 @@ export default function AuthForm() {
             href="/signup"
             className="block w-full text-center bg-blue-500 hover:bg-blueBg text-white font-medium py-3 rounded-lg transition duration-150"
           >
-            S'inscrire
+            S&rsquo;inscrire
           </Link>
 
           <div className="flex items-center gap-2 text-gray-400 text-sm justify-center">
