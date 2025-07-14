@@ -1,4 +1,3 @@
-"use client";
 
 import Image from "next/image";
 import React from "react";
@@ -8,11 +7,11 @@ import HomeCardsFullSection from "./homeCardSection/page";
 
 export const metadata = {
   title: 'Apprendre l\'informatique quantique - QuantumCamp',
-  description: 'Apprenez les bases de l\informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
-  keywords: ['informatique quantique', 'apprendre l\informatique quantique', 'c\'est quoi l\'informatique quantique?', 'apprendre l\'informatique quantique en ligne'],
+  description: 'Apprenez les bases de l\'informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
+  keywords: ['informatique quantique', 'apprendre l\'informatique quantique', 'c\'est quoi l\'informatique quantique?', 'apprendre l\'informatique quantique en ligne'],
   openGraph: {
     title: 'Apprendre l\'informatique quantique - QuantumCamp',
-    description: 'Apprenez les bases de l\informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
+    description: 'Apprenez les bases de l\'informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
     url: 'https://quantumcamp.fr',
     siteName: 'QuantumCamp',
     images: [
