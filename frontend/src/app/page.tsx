@@ -1,16 +1,36 @@
-"use client";
 
 import Image from "next/image";
 import React from "react";
 import text from '@/text/text';
 import HomeCardsFullSection from "./homeCardSection/page";
 
+
+export const metadata = {
+  title: 'Apprendre l\'informatique quantique - QuantumCamp',
+  description: 'Apprenez les bases de l\'informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
+  keywords: ['informatique quantique', 'apprendre l\'informatique quantique', 'c\'est quoi l\'informatique quantique?', 'apprendre l\'informatique quantique en ligne'],
+  openGraph: {
+    title: 'Apprendre l\'informatique quantique - QuantumCamp',
+    description: 'Apprenez les bases de l\'informatqiue quantique de façon interactive grâce à nos cours d\'introduction.',
+    url: 'https://quantumcamp.fr',
+    siteName: 'QuantumCamp',
+    images: [
+      {
+        url: 'https://www.quantumcamp.fr/_next/image?url=%2Fassets%2FQuantumCamp.png&w=828&q=75',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'fr_FR',
+    type: 'website',
+  },
+};
+
 export default function Home() {
   return (
     <>
       <section className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-purple-100 via-blue-50 to-white rounded-3xl shadow-2xl p-8 md:p-16 min-h-[80vh] overflow-hidden">
 
-        {/* Image à gauche */}
         <div className="hidden md:w-1/2 md:ml-20 md:flex md:justify-center md:justify-start mb-8 md:mb-0">
           <Image  
             src="/assets/quantum.png" 
@@ -22,7 +42,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Texte à droite */}
         <div className="flex flex-col items-center mt-20 md:mt-12 md:items-start text-center md:text-left w-full md:w-1/2 space-y-10">
           <h1 className="font-anekDeva text-5xl md:text-6xl font-extrabold leading-tight">
             {text.page.components.homePage.title}
@@ -37,7 +56,6 @@ export default function Home() {
               {text.page.components.homePage.button}
           </a>
         </div>
-
       </section>
 
       <HomeCardsFullSection />
