@@ -19,12 +19,15 @@
     "cors": "^2.8.5",
     "fortawesome": "^0.0.1-security",
     "framer-motion": "^12.6.3",
+    "i18next": "^25.3.2",
     "js-cookie": "^3.0.5",
     "next": "14.2.7",
+    "next-i18next": "^15.4.2",
     "next-sitemap": "^4.2.3",
     "nextjs-cors": "^2.2.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-i18next": "^15.6.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.4",

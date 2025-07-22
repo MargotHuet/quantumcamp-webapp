@@ -4,10 +4,11 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 import Link from "next/link";
 import Image from "next/image";
-import data from "../data/data";
 import { useRouter } from "next/navigation";
+import { useTranslation } from 'next-i18next';
 
 export default function Navbar() {
+  const { t } = useTranslation('common');
   const [user, setUser] = useState<{ id: string; name?: string } | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
@@ -82,16 +83,21 @@ export default function Navbar() {
       </div>
       <div className={`lg:flex ${menuOpen ? "block" : "hidden"} absolute lg:relative top-16 left-0 lg:top-auto lg:left-auto w-full lg:w-auto bg-white lg:bg-transparent z-10`}>
         <div className="flex flex-col lg:flex-row lg:items-center w-full lg:w-auto">
-          {data.navigation.map((item, index) => (
-            <Link
-              key={`nav-${index}`}
-              href={`/${item.href}`}
-              className="px-4 py-2 text-black cursor-pointer"
-              onClick={closeMenu}
-            >
-              {item.label}
-            </Link>
-          ))}
+          <Link href="/learn" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+            {t('navigation.learn')}
+          </Link>
+          <Link href="/pricing" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+            {t('navigation.pricing')}
+          </Link>
+          <Link href="/blog" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+            {t('navigation.blog')}
+          </Link>
+          <Link href="/about" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+            {t('navigation.about')}
+          </Link>
+          <Link href="/contact" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+            {t('navigation.contact')}
+          </Link>
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-4 w-full lg:w-auto">
           {user ? (
@@ -107,20 +113,18 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            data.account.map((item, index) => (
-              <Link
-                key={`account-${index}`}
-                href={`/${item.href}`}
-                className={`px-4 py-2 ${
-                  item.href === "signup"
-                    ? "border border-sky-500 bg-blue-100 text-black rounded-lg hover:bg-blue-200 hover:border-sky-600 hover:text-white"
-                    : "text-black"
-                } cursor-pointer`}
+            <>
+              <Link href="/login" className="px-4 py-2 text-black cursor-pointer" onClick={closeMenu}>
+                {t('navigation.login')}
+              </Link>
+              <Link 
+                href="/signup" 
+                className="px-4 py-2 border border-sky-500 bg-blue-100 text-black rounded-lg hover:bg-blue-200 hover:border-sky-600 hover:text-white cursor-pointer" 
                 onClick={closeMenu}
               >
-                {item.label}
+                {t('navigation.signup')}
               </Link>
-            ))
+            </>
           )}
         </div>
       </div>

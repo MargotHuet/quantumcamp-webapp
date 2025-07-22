@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useTranslation } from 'next-i18next';
 
 // Composant de prévisualisation d'un article de blog. 
 
@@ -13,6 +14,7 @@ interface BlogArticle {
 }
 
 export default function BlogList() {
+  const { t } = useTranslation('common');
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,8 +35,8 @@ export default function BlogList() {
     fetchArticles();
   }, []);
 
-  if (loading) return <p>Chargement des articles...</p>;
-  if (articles.length === 0) return <p>Aucun article trouvé.</p>;
+  if (loading) return <p>{t('blog.loading')}</p>;
+  if (articles.length === 0) return <p>{t('blog.noArticles')}</p>;
 
   return (
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -61,7 +63,7 @@ export default function BlogList() {
               href={`/blog/${article.slug}`}
               className="mt-2 inline-block text-purple-600 hover:underline font-medium text-sm"
             >
-              Lire l’article →
+              {t('blog.readArticle')}
             </a>
           </div>
         </article>

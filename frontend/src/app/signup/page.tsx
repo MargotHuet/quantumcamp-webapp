@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modals";
+import { useTranslation } from 'next-i18next';
 
 interface FormData {
     name: string;
@@ -13,6 +14,7 @@ interface FormData {
 }
 
 export default function Signup() {
+    const { t } = useTranslation('common');
     const router = useRouter();
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -146,42 +148,42 @@ export default function Signup() {
                         </Link>
                         </div>
                         <div className="text-center desktop:text-left mb-2">
-                            <p className="text-2xl desktop:text-4xl font-firaSans">Créez votre compte</p>
+                            <p className="text-2xl desktop:text-4xl font-firaSans">{t('auth.createAccount')}</p>
                         </div>
 
                         <div className="mb-6 text-center desktop:text-left">
                             <p className="text-sm text-gray-600 font-anekDeva">
-                                Vous avez déjà un compte?
-                                <Link href={"/login"} className="text-blue-500 px-2 font-bold">Connexion</Link>
+                                {t('auth.haveAccount')}
+                                <Link href={"/login"} className="text-blue-500 px-2 font-bold">{t('auth.login')}</Link>
                             </p>
                         </div>
                         <div className="flex flex-col gap-2 w-8/12 max-w-sm">
-                            <label className="text-md font-firaSans">Prénom</label>
+                            <label className="text-md font-firaSans">{t('auth.firstName')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="text"
                                 name="name"
-                                placeholder="Prénom"
+                                placeholder={t('auth.firstName')}
                                 onChange={handleChange}
                                 value={formData.name}
                                 required
                             />
-                            <label className="text-md font-firaSans">Email</label>
+                            <label className="text-md font-firaSans">{t('auth.email')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="email"
                                 name="email"
-                                placeholder="Email"
+                                placeholder={t('auth.email')}
                                 onChange={handleChange}
                                 value={formData.email}
                                 required
                             />
-                            <label className="text-md font-firaSans">Mot de passe</label>
+                            <label className="text-md font-firaSans">{t('auth.password')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="password"
                                 name="password"
-                                placeholder="Mot de passe"
+                                placeholder={t('auth.password')}
                                 onChange={handleChange}
                                 value={formData.password}
                                 required
@@ -201,12 +203,12 @@ export default function Signup() {
                                     "Très bonne"
                                 ][passwordStrength]}
                             </p>
-                            <label className="text-md font-firaSans mt-2">Confirmez votre mot de passe</label>
+                            <label className="text-md font-firaSans mt-2">{t('auth.confirmPassword')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="password"
                                 name="confirmPassword"
-                                placeholder="Confirmez votre mot de passe"
+                                placeholder={t('auth.confirmPassword')}
                                 onChange={handleChange}
                                 value={formData.confirmPassword}
                                 required
@@ -219,14 +221,14 @@ export default function Signup() {
                                     required
                                 />
                                 <label htmlFor="terms" className="text-sm ml-2">
-                                    En vous inscrivant, vous acceptez les{" "}
+                                    {t('auth.termsAccept')}{" "}
                                     <Link
                                         href="/cgu"
                                         className="text-blue-500 underline"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        conditions générales d&apos;utilisation
+                                        {t('auth.termsOfUse')}
                                     </Link>.
                                 </label>
                             </div>
@@ -234,7 +236,7 @@ export default function Signup() {
                                 className="text-md w-full font-firaSans border border-orange-500 bg-orange-100 mt-4 rounded-md py-2"
                                 type="submit"
                             >
-                                Inscription
+                                {t('auth.signup')}
                             </button>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modals";
+import { useTranslation } from 'next-i18next';
 
 interface LoginData {
     email: string;
@@ -11,6 +12,7 @@ interface LoginData {
 }
 
 export default function Login() {
+    const { t } = useTranslation('common');
     const router = useRouter();
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
@@ -86,47 +88,47 @@ export default function Login() {
                         </Link>
                         </div>
                         <div className="text-center desktop:text-left mb-2">
-                            <h1 className="text-xl desktop:text-lg font-firaSans">Welcome back !</h1>
-                            <p className="text-2xl desktop:text-4xl font-firaSans">Connectez-vous</p>
+                            <h1 className="text-xl desktop:text-lg font-firaSans">{t('auth.welcomeBack')}</h1>
+                            <p className="text-2xl desktop:text-4xl font-firaSans">{t('auth.signIn')}</p>
                         </div>
 
                         <div className="mb-6 text-center desktop:text-left">
                             <p className="text-sm text-gray-600 font-anekDeva">
-                                Vous n&apos;avez pas de compte?
+                                {t('auth.noAccount')}
                                 <Link href={"/signup"} className="text-blue-500 font-bold">
-                                    {' '}Créez le vôtre
+                                    {' '}{t('auth.signUp')}
                                 </Link>
                             </p>
                         </div>
                         <div className="flex flex-col gap-4 w-8/12 max-w-sm">
-                            <label className="text-md font-firaSans">Email</label>
+                            <label className="text-md font-firaSans">{t('auth.email')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="text"
                                 name="email"
-                                placeholder="Email"
+                                placeholder={t('auth.email')}
                                 onChange={handleChange}
                                 value={formData.email}
                                 required
                             />
-                            <label className="text-md font-firaSans">Mot de passe</label>
+                            <label className="text-md font-firaSans">{t('auth.password')}</label>
                             <input
                                 className="bg-blueBg w-full h-10 px-2"
                                 type="password"
                                 name="password"
-                                placeholder="Mot de passe"
+                                placeholder={t('auth.password')}
                                 onChange={handleChange}
                                 value={formData.password}
                                 required
                             />
                             <div className="text-xs font-anekDeva text-blue-500 text-right">
-                                <Link href="/forgotPassword">Mot de passe oublié?</Link>
+                                <Link href="/forgotPassword">{t('auth.forgotPassword')}</Link>
                             </div>
                             <button
                                 className="text-md font-firaSans border border-orange-500 bg-orange-100 mt-2 rounded-md py-2"
                                 type="submit"
                             >
-                                Connexion
+                                {t('auth.login')}
                             </button>
                         </div>
                     </div>

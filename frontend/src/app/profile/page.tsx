@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import UserCompletedChapters from "@/components/UserCompletedChapters";
 import Modal from "@/components/Modals";
+import { useTranslation } from 'next-i18next';
 
 interface UserData {
   name: string;
@@ -12,6 +13,7 @@ interface UserData {
 }
 
 export default function Profile() {
+  const { t } = useTranslation('common');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -110,13 +112,13 @@ export default function Profile() {
               onClick={() => router.push('/updatePassword')}
               className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
             >
-              Modifier le mot de passe
+              {t('profile.changePassword')}
             </button>
             <button
               onClick={() => setModalOpen(true)}
               className="border border-orange-300 bg-orange-100 rounded-lg w-full p-2 hover:bg-orange-200 hover:border-orange-400 hover:text-white"
             >
-              Supprimer votre compte
+              {t('profile.deleteAccount')}
             </button>
           </div>
         </section>
@@ -130,20 +132,20 @@ export default function Profile() {
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <p className="text-center mb-4">
-          Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et vos données seront perdues.
+          {t('profile.confirmDelete')}
         </p>
         <div className="flex justify-center gap-4">
           <button
             onClick={handleDeleteAccount}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
           >
-            Confirmer
+            {t('profile.confirm')}
           </button>
           <button
             onClick={() => setModalOpen(false)}
             className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400"
           >
-            Annuler
+            {t('profile.cancel')}
           </button>
         </div>
       </Modal>

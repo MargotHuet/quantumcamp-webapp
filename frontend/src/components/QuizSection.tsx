@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 
 interface Chapter {
   id: string;
@@ -26,6 +27,7 @@ export default function QuizSection({
   chapterId: string;
   userId: string;
 }) {
+  const { t } = useTranslation('common');
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
@@ -114,7 +116,7 @@ export default function QuizSection({
   };
 
   if (loading) {
-    return <p className="text-center">Chargement...</p>;
+    return <p className="text-center">{t('quiz.loading')}</p>;
   }
 
   if (error) {
@@ -122,7 +124,7 @@ export default function QuizSection({
   }
 
   if (!quiz || !quiz.question) {
-    return <p className="text-center">Aucun quiz disponible pour ce chapitre.</p>;
+    return <p className="text-center">{t('quiz.noQuiz')}</p>;
   }
 
   return (
@@ -152,7 +154,7 @@ export default function QuizSection({
       </div>
       {selectedAnswerId !== null && (
         <p className="text-center mt-4 font-bold">
-          {isCorrect ? "Bonne réponse ! 🎉" : "Mauvaise réponse. 😢"}
+          {isCorrect ? t('quiz.correctAnswer') : t('quiz.wrongAnswer')}
         </p>
       )}
       {showNextButton && (
@@ -160,7 +162,7 @@ export default function QuizSection({
           onClick={handleNextQuiz}
           className="border border-blue-500 bg-blue-100 rounded-lg w-40 p-2 hover:bg-blue-200 hover:border-blue-600 hover:text-white mt-4"
         >
-          Suivant
+          {t('quiz.next')}
         </button>
       )}
     </div>

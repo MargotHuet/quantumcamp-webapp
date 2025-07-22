@@ -1,0 +1,157 @@
+{
+  "navigation": {
+    "learn": "Learn",
+    "pricing": "Pricing", 
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "cgu": "Terms"
+  },
+  "homePage": {
+    "title": "Learn quantum computing.",
+    "description": "Quantum Camp is the place where you'll discover quantum computing, whether you're a computer engineer or simply curious.",
+    "button": "Get Started"
+  },
+  "homeCardsFullSection": {
+    "title": "Why should you learn quantum computing?",
+    "description": "Quantum computing revolutionizes computation and opens unique technological opportunities. 🚀"
+  },
+  "about": {
+    "title1": "About QuantumCamp",
+    "text1": "Welcome to QuantumCamp, your French-speaking platform dedicated to learning quantum computing! 🌌 At QuantumCamp, we firmly believe that quantum computation is not reserved for a scientific elite. Our mission is to demystify the complex concepts of this fascinating field and make them accessible to everyone. Whether you're a student, curious professional, or passionate about new technologies, QuantumCamp is designed to accompany you in this discovery.",
+    "title2": "Our Vision", 
+    "text2": "Quantum computing represents a major turning point in the technological world. However, the lack of educational content in French hinders access to this knowledge for a wide audience. QuantumCamp aims to fill this gap by offering educational resources in French, accessible and adapted to a broad public."
+  },
+  "cgu": {
+    "mainTitle": "Terms of Use",
+    "title1": "1. Purpose",
+    "content1": "These Terms of Use (hereinafter \"Terms\") are intended to define the terms and conditions under which users (hereinafter \"Users\") can access and use the QuantumCamp site/app (hereinafter \"the Service\").\n\nBy accessing or using the Service, the User accepts these Terms without reservation.",
+    "title2": "2. Legal Information",
+    "content2": "Company name: Quantumcamp,\nRegistered office address: Paris,\nContact: contact@quantumcamp.fr",
+    "title3": "3. Access to the Service",
+    "content3": "The Service is freely accessible to any User with Internet access. The User is responsible for their computer equipment, software and Internet access.\n\nCertain features may require registration or authentication. The User undertakes to provide accurate information during registration.",
+    "title4": "4. Registration and User Account",
+    "content4": "To access certain features, the User must create a personal account by providing accurate and up-to-date information.\n\nUser obligations:\n- Not to share their credentials with a third party.\n- Maintain the confidentiality of their login information.\n- Immediately inform Quantumcamp in case of suspected fraudulent use of their account.\nQuantumcamp reserves the right to suspend or delete an account in case of violation of the Terms.",
+    "title5": "5. Intellectual Property",
+    "content5": "All content present on the Service (texts, images, logos, videos, etc.) is protected by intellectual property laws and is the exclusive property of Quantumcamp or its partners.\n\nThe User undertakes not to reproduce, modify, distribute or exploit this content without express authorization.",
+    "title6": "6. Acceptable Use",
+    "content6": "The User undertakes not to:\n\n- Use the Service for illegal or fraudulent purposes.\n- Transmit offensive, defamatory or illicit content.\n- Harm the proper functioning of the Service, particularly by introducing viruses or other malicious technologies.",
+    "title7": "7. Personal Data",
+    "content7": "The processing of the User's personal data is governed by our privacy policy. By using Quantumcamp, the User consents to the processing of their data in accordance with this policy.",
+    "title8": "8. Responsibility",
+    "content8": "Quantumcamp strives to ensure the proper functioning and security of the Service. However, Quantumcamp cannot be held responsible in case of:\n\n- Temporary interruptions for maintenance or updates.\n- Direct or indirect damages related to the use or inability to use the Service.",
+    "title9": "9. Modification of Terms",
+    "content9": "Quantumcamp reserves the right to modify these Terms at any time. Modifications will be published on this page and will take effect upon publication.\n\nThe User is invited to regularly consult the Terms. By continuing to use the Service, the User accepts the modifications.",
+    "title10": "10. Applicable Law and Competent Jurisdiction",
+    "content10": "These Terms are governed by French law. In case of dispute, the competent courts are those of the Ile-de-France jurisdiction.",
+    "title11": "11. Contact",
+    "content11": "For any question or complaint relating to these Terms, the User can contact:\n\n- Email: contact@quantumcamp.fr",
+    "last_maj": "Last updated on 29/11/2024"
+  },
+  "privacyPolicy": {
+    "mainTitle": "Personal Data Privacy Policy",
+    "introduction": "At QuantumCamp, we attach great importance to protecting the personal data of our users. This Privacy Policy explains how we collect, use and protect your personal information in accordance with applicable laws, including the General Data Protection Regulation (GDPR). By using our services, you accept the terms of this Privacy Policy.",
+    "title1": "1. Data Controller",
+    "content1": "The data controller is:\n- Company name: QuantumCamp\n- Address: Paris\n- Email: contact@quantumcamp.com",
+    "title2": "2. Data Collected",
+    "content2": "We only collect data necessary to provide and improve our services. The types of data collected include: First name, Email address, Login information (username and password), Any other information voluntarily provided via our forms or communications.",
+    "title3": "3. Purposes of Data Processing",
+    "content3": "User account creation and management, personalization of your experience on our platform, sending communications related to our services, such as updates or notifications, improvement of our services through statistical analysis, compliance with legal obligations.",
+    "title4": "4. Legal Basis for Processing",
+    "content4": "Consent: When you have explicitly accepted the processing (e.g.: newsletter subscription), contract execution: When processing is necessary to provide you with a service, legal obligation: When the law requires us to retain certain data, legitimate interest: To improve our services and ensure their security.",
+    "title5": "5. Data Sharing",
+    "content5": "Your personal data is never sold. However, it may be shared with the following third parties, only when necessary:\n\n- Service providers: Technical providers (hosting, emails, payments).\n- Legal authorities: If required by law or in case of judicial request.\n\nAll our partners commit to respecting strict confidentiality standards.",
+    "title6": "6. Data Retention",
+    "content6": "Your data is retained only for the time necessary for the purposes described in this Policy. Retention periods may vary:\n\n- Account data: Until user account deletion.\n- Navigation data: 12 months maximum.\n- Data related to legal obligations: Periods imposed by legislation.",
+    "title7": "7. Data Security",
+    "content7": "We implement appropriate technical and organizational measures to protect your data against unauthorized access, loss or alteration:\n\n- Use of secure protocols (HTTPS).\n- Password encryption.\n- Regular security checks.\n\nHowever, no system is completely invulnerable, and we cannot guarantee absolute security.",
+    "title8": "8. Your Rights",
+    "content8": "In accordance with GDPR, you have the following rights: Right of access: Obtain a copy of personal data concerning you. Right of rectification: Correct inaccurate or incomplete information. Right to erasure: Request deletion of your personal data. Right to limitation: Restrict the processing of your data in certain cases. Right to portability: Receive your data in a structured and readable format. Right to object: Refuse the processing of your data for legitimate reasons. Right to withdraw your consent: At any time, for processing based on your consent.",
+    "title9": "9. Cookies",
+    "content9": "Our site uses cookies to improve your experience. Cookies may be used to:\n\n- Store your user preferences.\n- Track your navigation for analysis purposes.\n\nYou can manage your cookie preferences in your browser settings.",
+    "title10": "10. Privacy Policy Changes",
+    "content10": "This Privacy Policy may be updated to reflect changes in our practices or regulations. We will inform you of any significant changes by email or via our site.\n\nLast update date: 29/11/2024",
+    "title11": "11. Contact",
+    "content11": "For any question or complaint regarding this Privacy Policy, you can contact us:\n\n- By email: contact@quantumcamp.com"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back!",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create your account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "firstName": "First Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot password?",
+    "login": "Login",
+    "signup": "Sign Up",
+    "termsAccept": "By signing up, you accept the",
+    "termsOfUse": "terms of use"
+  },
+  "profile": {
+    "name": "Name",
+    "email": "Email",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account",
+    "completedChapters": "Completed chapters:",
+    "noCompletedChapters": "No completed chapters:",
+    "startNow": "🚀 Start now 🚀",
+    "confirmDelete": "Are you sure you want to delete your account? This action is irreversible and your data will be lost.",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "learn": {
+    "summary": "Summary",
+    "loading": "Loading...",
+    "noCourses": "No courses available.",
+    "mustBeLoggedIn": "You must be logged in to view this page.",
+    "welcome": "Welcome to",
+    "connectOrSignup": "Sign in or create an account to access the platform.",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "or": "or"
+  },
+  "quiz": {
+    "loading": "Loading...",
+    "noQuiz": "No quiz available for this chapter.",
+    "correctAnswer": "Correct answer! 🎉",
+    "wrongAnswer": "Wrong answer. 😢",
+    "next": "Next",
+    "allChaptersCompleted": "You have completed all chapters!"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question? Let us know.",
+    "email": "Email",
+    "subject": "Subject",
+    "subjectPlaceholder": "Tell us everything",
+    "message": "Message",
+    "messagePlaceholder": "Write your question...",
+    "send": "Send"
+  },
+  "blog": {
+    "title": "Blog",
+    "readArticle": "Read article →",
+    "loading": "Loading articles...",
+    "noArticles": "No articles found."
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Choose the plan that meets your needs.",
+    "free": "Free",
+    "freeDescription": "Learn for free",
+    "freeAccess": "Free access",
+    "getStarted": "Get Started"
+  },
+  "common": {
+    "back": "← Back",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import '@/fontawesomeconfig';
 import { GTMWrapper } from "@/components/cookies/GTMWrapper";
+import { appWithTranslation } from 'next-i18next';
 
 export const metadata: Metadata = {
   title: "Quantum Camp",

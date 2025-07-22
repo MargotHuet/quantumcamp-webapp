@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import AuthForm from "@/components/authentication/AuthForm";
+import { useTranslation } from 'next-i18next';
 
 interface Course {
   id: string;
@@ -11,6 +12,7 @@ interface Course {
 }
 
 export default function Learn() {
+  const { t } = useTranslation('common');
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<{ id: string; } | null>(null);
@@ -59,18 +61,18 @@ export default function Learn() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>{t('learn.loading')}</p>;
   }
 
   if (!courses || courses.length === 0) {
-    return <p>No courses available.</p>;
+    return <p>{t('learn.noCourses')}</p>;
   }
 
   return (
     <>
       {user ? (
         <div className="flex flex-col items-center justify-center bg-creamWhite px-4 py-8 md:px-10 md:py-12 min-h-screen">
-          <h1 className="text-2xl md:text-4xl font-bold mb-6">Sommaire</h1>
+          <h1 className="text-2xl md:text-4xl font-bold mb-6">{t('learn.summary')}</h1>
           <div className="flex flex-col w-full max-w-lg bg-blueBg rounded-lg p-4 md:p-6 text-center">
             {courses.map(course => (
               <div key={course.id} className="flex flex-col md:flex-row items-center justify-between w-full mb-4 p-2 bg-gray-100 hover:bg-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">

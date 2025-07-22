@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 
 interface CompletedChapter {
   chapter_id: string;
@@ -9,6 +10,7 @@ interface CompletedChapter {
 }
 
 const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
+  const { t } = useTranslation('common');
   const [completedChapters, setCompletedChapters] = useState<CompletedChapter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +43,7 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
   }, [userId]);
 
   if (loading) {
-    return <p>Chargement des chapitres complétés...</p>;
+    return <p>{t('common.loading')}</p>;
   }
 
   if (error) {
@@ -49,13 +51,13 @@ const UserCompletedChapters: React.FC<{ userId: string }> = ({ userId }) => {
   }
 
   if (completedChapters.length === 0) {
-    return <p>Aucun chapitre complété: 
-      <Link href={"/learn"} className='font-bold text-orange-500 hover:text-orange-400'> 🚀 Commencez maintenant 🚀</Link></p>;
+    return <p>{t('profile.noCompletedChapters')} 
+      <Link href={"/learn"} className='font-bold text-orange-500 hover:text-orange-400'> {t('profile.startNow')}</Link></p>;
   }
 
   return (
     <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-lg">
-      <h3 className="text-lg font-bold mb-4">Chapitres complétés:</h3>
+      <h3 className="text-lg font-bold mb-4">{t('profile.completedChapters')}</h3>
       <ul className="list-disc list-inside">
       {completedChapters.map((chapter, index) => (
           <ul key={index}>
